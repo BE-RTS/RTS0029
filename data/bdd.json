@@ -20,8 +20,8 @@
       ],
       "statuts": {
         "cao": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777270408802
         },
         "prod": {
           "val": "a_faire",
