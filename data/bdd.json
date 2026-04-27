@@ -157,7 +157,9 @@
           "ts": null
         }
       }
-    },
+    }
+  ],
+  "archive": [
     {
       "id": 1777274011697,
       "date": "24/03/2026",
@@ -193,25 +195,24 @@
       ],
       "statuts": {
         "cao": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777274013596
         },
         "prod": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777274014585
         },
         "be": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777274015379
         },
         "pmi": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777274016149
         }
-      }
-    }
-  ],
-  "archive": [
+      },
+      "archivedAt": 1777274016693
+    },
     {
       "id": 1777273842524,
       "date": "24/03/2026",
