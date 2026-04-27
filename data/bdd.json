@@ -135,16 +135,16 @@
       "media": [],
       "statuts": {
         "cao": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777272655992
         },
         "prod": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777272656927
         },
         "be": {
-          "val": "a_faire",
-          "ts": null
+          "val": "a_fait",
+          "ts": 1777272658022
         },
         "pmi": {
           "val": "a_faire",
