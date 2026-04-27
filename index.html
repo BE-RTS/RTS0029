@@ -149,9 +149,109 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
 .confirm-title{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
 .confirm-msg{font-size:12.5px;color:var(--text-dim);line-height:1.6;margin-bottom:18px;white-space:pre-wrap}
 .confirm-btns{display:flex;gap:9px;justify-content:flex-end}
+/* ── Styles supplémentaires pour la page de login ── */
+.login-screen {
+      display: none;
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-screen.visible { display: flex; }
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      padding: 36px 40px;
+      width: 360px;
+      border-radius: 2px;
+      box-shadow: 0 8px 40px var(--shadow);
+    }
+    .login-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .login-error {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #c0392b;
+      background: rgba(192,57,43,.08);
+      border: 1px solid rgba(192,57,43,.3);
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      display: none;
+      border-radius: 2px;
+    }
+    .login-error.visible { display: block; }
+
+    /* Header — zone utilisateur */
+    .user-info {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user-role-badge {
+      background: var(--accent-faint);
+      color: var(--accent);
+      border: 1px solid rgba(170,14,16,.25);
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-family: var(--mono);
+    }
 </style>
 </head>
 <body>
+
+<!-- ══ ÉCRAN DE LOGIN (affiché avant tout) ══ -->
+<div class="login-screen visible" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">PLAN—MANAGER</div>
+    <div class="login-error" id="login-error"></div>
+    <div class="form-group">
+      <label class="form-label" for="login-email">Adresse email</label>
+      <input class="form-input" type="email" id="login-email"
+        placeholder="votre@email.com" autocomplete="email">
+    </div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label class="form-label" for="login-password">Mot de passe</label>
+      <input class="form-input" type="password" id="login-password"
+        placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()" id="login-btn">
+      Se connecter
+    </button>
+  </div>
+</div>
+
+<!-- ══ APP PRINCIPALE (cachée jusqu'au login) ══ -->
+<div id="app" style="display:none">
+
+  <header>
+    <div class="logo">PLAN—MANAGER <span class="logo-sub">// Suivi mises à jour</span></div>
+    <div class="hdr-right">
+      <div class="clock" id="clock"></div>
+      <div class="sync-pill" id="sync-pill">
+        <span class="sync-dot"></span><span id="sync-text">Connexion…</span>
+      </div>
+      <!-- Info utilisateur connecté -->
+      <div class="user-info">
+        <span id="user-email-display"></span>
+        <span class="user-role-badge" id="user-role-display"></span>
+      </div>
+      <button class="icon-btn" title="Déconnexion" onclick="doLogout()">⎋</button>
+      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()">☀️</button>
+    </div>
+  </header>
 
 <header>
   <div class="logo">PLAN<span style="color:var(--border-light);font-weight:300">—</span>MANAGER <span class="logo-sub">// Suivi mises à jour</span></div>
@@ -212,7 +312,7 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       <div class="form-row">
         <div class="form-group">
           <label class="form-label" for="f-dem">Demandeur</label>
-          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="off">
+          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="on">
           <datalist id="dem-list">
             <option value="Didier Musekedi"><option value="Yves Martelin">
             <option value="David Perron"><option value="Christophe Demonaz">
@@ -283,37 +383,245 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
   </div>
 </div>
 
+<!-- ══ SCRIPTS FIREBASE ══ -->
+<script type="module">
+  // Import Firebase SDK (via CDN, pas besoin d'npm pour GitHub Pages)
+  import { initializeApp }              from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getFirestore, collection, doc, getDoc, getDocs,
+           addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  import { firebaseConfig } from './firebase-config.js';
+
+  // ── Initialisation ──
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  // ── Variables globales de session ──
+  window.currentUser     = null;   // objet Firebase User
+  window.currentUserRole = null;   // 'admin' ou 'user'
+  window.isAdmin = () => window.currentUserRole === 'admin';
+
+  // ══════════════════════════════════════════════
+  //  AUTHENTIFICATION
+  // ══════════════════════════════════════════════
+
+  // Surveille l'état de connexion en permanence
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // Utilisateur connecté → récupère son profil
+      const profileDoc = await getDoc(doc(db, 'users', user.uid));
+      if (!profileDoc.exists()) {
+        // Profil absent dans Firestore → déconnecte
+        await signOut(auth);
+        showLoginError("Profil introuvable. Contactez l'administrateur.");
+        return;
+      }
+      const profile = profileDoc.data();
+      window.currentUser     = user;
+      window.currentUserRole = profile.role;
+
+      // Affiche l'app, cache le login
+      document.getElementById('login-screen').classList.remove('visible');
+      document.getElementById('app').style.display = '';
+
+      // Met à jour l'affichage du header
+      document.getElementById('user-email-display').textContent = profile.nom || user.email;
+      document.getElementById('user-role-display').textContent  = profile.role === 'admin' ? 'Admin' : 'Utilisateur';
+
+      // Adapte l'interface selon le rôle
+      applyRoleRestrictions();
+
+      // Charge les données Firestore
+      startRealtimeListeners();
+
+    } else {
+      // Non connecté → affiche le login, cache l'app
+      window.currentUser     = null;
+      window.currentUserRole = null;
+      document.getElementById('login-screen').classList.add('visible');
+      document.getElementById('app').style.display = 'none';
+    }
+  });
+
+  window.doLogin = async function() {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btn      = document.getElementById('login-btn');
+
+    if (!email || !password) { showLoginError('Veuillez remplir tous les champs.'); return; }
+
+    btn.textContent = 'Connexion…';
+    btn.disabled    = true;
+    hideLoginError();
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged prend le relais automatiquement
+    } catch (e) {
+      btn.textContent = 'Se connecter';
+      btn.disabled    = false;
+      const msg = {
+        'auth/user-not-found':  "Aucun compte avec cet email.",
+        'auth/wrong-password':  "Mot de passe incorrect.",
+        'auth/invalid-email':   "Email invalide.",
+        'auth/too-many-requests': "Trop de tentatives. Réessaie dans quelques minutes.",
+      }[e.code] || "Erreur de connexion : " + e.message;
+      showLoginError(msg);
+    }
+  };
+
+  window.doLogout = async function() {
+    await signOut(auth);
+  };
+
+  function showLoginError(msg) {
+    const el = document.getElementById('login-error');
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+  function hideLoginError() {
+    document.getElementById('login-error').classList.remove('visible');
+  }
+
+  // ══════════════════════════════════════════════
+  //  RESTRICTIONS D'INTERFACE SELON LE RÔLE
+  // ══════════════════════════════════════════════
+
+  function applyRoleRestrictions() {
+    // Ces fonctions seront appelées aussi après chaque renderAll()
+    // On les stocke pour pouvoir les rappeler
+    window._applyRoleRestrictions = function() {
+      if (window.isAdmin()) return; // Admin : rien à restreindre
+
+      // Utilisateur normal :
+      // - Cache les boutons Supprimer (✕) des demandes des autres
+      // - Cache les boutons Archiver
+      // La logique fine est dans renderActif() — voir section 9
+    };
+    window._applyRoleRestrictions();
+  }
+
+  // ══════════════════════════════════════════════
+  //  LISTENERS TEMPS RÉEL FIRESTORE
+  // ══════════════════════════════════════════════
+  //
+  // onSnapshot() écoute les changements en temps réel.
+  // Quand un autre utilisateur modifie une demande, ton écran
+  // se met à jour automatiquement sans recharger la page.
+
+  let _unsubDemandes = null;
+  let _unsubArchives = null;
+
+  function startRealtimeListeners() {
+    // Écoute la collection "demandes"
+    _unsubDemandes = onSnapshot(
+      query(collection(db, 'demandes'), orderBy('date', 'desc')),
+      (snapshot) => {
+        window.dbData = snapshot.docs.map(d => ({ _firestoreId: d.id, ...d.data() }));
+        renderActif();
+        if (window._applyRoleRestrictions) window._applyRoleRestrictions();
+      },
+      (err) => { console.error('Listener demandes:', err); updateSyncPill('err'); }
+    );
+
+    // Écoute la collection "archives"
+    _unsubArchives = onSnapshot(
+      query(collection(db, 'archives'), orderBy('archivedAt', 'desc')),
+      (snapshot) => {
+        window.archiveData = snapshot.docs.map(d => ({ _firestoreId: d.id, ...d.data() }));
+        renderArchive();
+      },
+      (err) => { console.error('Listener archives:', err); }
+    );
+
+    updateSyncPill('ok', 'Connecté');
+  }
+
+  // Arrête les listeners à la déconnexion (évite les fuites mémoire)
+  // Géré automatiquement par onAuthStateChanged ci-dessus
+
+  // ══════════════════════════════════════════════
+  //  CRUD FIRESTORE — remplace les appels GitHub API
+  // ══════════════════════════════════════════════
+
+  // ── CRÉER une demande ──
+  window.firestoreCreate = async function(entryData) {
+    try {
+      const ref = await addDoc(collection(db, 'demandes'), {
+        ...entryData,
+        createdBy: window.currentUser.uid,
+        createdAt: Date.now()
+      });
+      console.log('Demande créée :', ref.id);
+    } catch (e) {
+      console.error('Erreur création:', e);
+      updateSyncPill('err', 'Erreur création');
+    }
+  };
+
+  // ── MODIFIER une demande ──
+  window.firestoreUpdate = async function(firestoreId, updates) {
+    try {
+      await updateDoc(doc(db, 'demandes', firestoreId), updates);
+    } catch (e) {
+      console.error('Erreur mise à jour:', e);
+      updateSyncPill('err', 'Erreur mise à jour');
+    }
+  };
+
+  // ── SUPPRIMER une demande ──
+  window.firestoreDelete = async function(firestoreId) {
+    try {
+      await deleteDoc(doc(db, 'demandes', firestoreId));
+    } catch (e) {
+      console.error('Erreur suppression:', e);
+    }
+  };
+
+  // ── ARCHIVER : déplace de "demandes" vers "archives" ──
+  window.firestoreArchive = async function(firestoreId) {
+    try {
+      const snap  = await getDoc(doc(db, 'demandes', firestoreId));
+      if (!snap.exists()) return;
+      await setDoc(doc(db, 'archives', firestoreId), {
+        ...snap.data(), archivedAt: Date.now()
+      });
+      await deleteDoc(doc(db, 'demandes', firestoreId));
+    } catch (e) {
+      console.error('Erreur archivage:', e);
+    }
+  };
+
+  // ── DÉSARCHIVER : remet dans "demandes" ──
+  window.firestoreUnarchive = async function(firestoreId) {
+    try {
+      const snap = await getDoc(doc(db, 'archives', firestoreId));
+      if (!snap.exists()) return;
+      const data = snap.data();
+      delete data.archivedAt;
+      await setDoc(doc(db, 'demandes', firestoreId), data);
+      await deleteDoc(doc(db, 'archives', firestoreId));
+    } catch (e) {
+      console.error('Erreur désarchivage:', e);
+    }
+  };
+
+  // ── SUPPRIMER une archive ──
+  window.firestoreDeleteArchive = async function(firestoreId) {
+    try {
+      await deleteDoc(doc(db, 'archives', firestoreId));
+    } catch (e) {
+      console.error('Erreur suppression archive:', e);
+    }
+  };
+
+</script>
+
 <script>
-// ═══════════════════════════════════════════════════════
-//  CONFIG GITHUB — remplacer ces valeurs
-// ═══════════════════════════════════════════════════════
-var GH_USER   = 'GITHUB_USER';
-var GH_REPO   = 'GITHUB_REPO';
-var GH_BRANCH = 'main';
-var GH_TOKEN  = 'GITHUB_TOKEN';
-var GH_FILE   = 'data/bdd.json';
-
-// ═══════════════════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════════════════
-var db = [];
-var archive = [];
-var _ghSha = null;
-var _saveTimer = null;
-var _confirmCb = null;
-var _editId = null;
-var _formMedia = [];
-
-var STATUS_COLS = [
-  {key:'cao',  label:'CAO mise à jour'},
-  {key:'prod', label:'Validation production'},
-  {key:'be',   label:'Validation B.E.'},
-  {key:'pmi',  label:'Mise à jour PMI'}
-];
-
-var REF_RX       = /^[DS]\d{2}\.\d{3}_([A-Z]|\.\.\.)$/;
-var REF_RX_LOOSE = /^[DS]\d{2}\.\d{3}_?([A-Z]|\.\.\.)$/;
-
 // ═══════════════════════════════════════════════════════
 //  THEME
 // ═══════════════════════════════════════════════════════
@@ -349,90 +657,6 @@ function displayToISO(disp) {
   document.getElementById('clock').textContent = formatDate(n) + ' · ' + n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
   setTimeout(tick, 1000);
 })();
-
-// ═══════════════════════════════════════════════════════
-//  SYNC PILL
-// ═══════════════════════════════════════════════════════
-function updateSyncPill(state, msg) {
-  var pill = document.getElementById('sync-pill');
-  var txt  = document.getElementById('sync-text');
-  pill.className = 'sync-pill';
-  if (state === 'ok')      { pill.classList.add('ok');     txt.textContent = msg || 'Synchronisé'; }
-  else if (state === 'err')     { pill.classList.add('err');    txt.textContent = msg || 'Erreur sync'; }
-  else if (state === 'saving')  { pill.classList.add('saving'); txt.textContent = 'Sauvegarde…'; }
-  else                          { txt.textContent = msg || ''; }
-}
-
-// ═══════════════════════════════════════════════════════
-//  GITHUB I/O
-// ═══════════════════════════════════════════════════════
-function ghHeaders() {
-  return {
-    'Authorization': 'Bearer ' + GH_TOKEN,
-    'Accept': 'application/vnd.github+json',
-    'Content-Type': 'application/json'
-  };
-}
-
-function loadFromGitHub() {
-  updateSyncPill('saving', 'Chargement…');
-  fetch('https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/' + GH_FILE + '?ref=' + GH_BRANCH, {
-    headers: ghHeaders()
-  })
-  .then(function(r) {
-    if (r.status === 404) {
-      _ghSha = null; db = []; archive = [];
-      updateSyncPill('ok', 'Prêt (BDD vide)');
-      renderAll();
-      return null;
-    }
-    if (!r.ok) { return r.json().then(function(j) { throw new Error('HTTP ' + r.status + ' — ' + (j.message||'')); }); }
-    return r.json();
-  })
-  .then(function(j) {
-    if (!j) return;
-    _ghSha = j.sha;
-    var decoded = JSON.parse(atob(j.content.replace(/\n/g, '')));
-    db      = decoded.actif   || [];
-    archive = decoded.archive || [];
-    updateSyncPill('ok', 'Synchronisé · ' + formatDate(new Date()));
-    renderAll();
-  })
-  .catch(function(e) {
-    updateSyncPill('err', 'Erreur chargement');
-    console.error('GH load:', e);
-  });
-}
-
-function saveToGitHub() {
-  updateSyncPill('saving');
-  var payload = JSON.stringify({actif: db, archive: archive}, null, 2);
-  var encoded = btoa(unescape(encodeURIComponent(payload)));
-  var body = { message: 'chore: maj BDD plans', content: encoded, branch: GH_BRANCH };
-  if (_ghSha) body.sha = _ghSha;
-  fetch('https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/' + GH_FILE, {
-    method: 'PUT',
-    headers: ghHeaders(),
-    body: JSON.stringify(body)
-  })
-  .then(function(r) {
-    if (!r.ok) { return r.json().then(function(j) { throw new Error(j.message); }); }
-    return r.json();
-  })
-  .then(function(j) {
-    _ghSha = j.content.sha;
-    updateSyncPill('ok', 'Synchronisé · ' + formatDate(new Date()));
-  })
-  .catch(function(e) {
-    updateSyncPill('err', 'Erreur sauvegarde');
-    console.error('GH save:', e);
-  });
-}
-
-function scheduleSave() {
-  clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(saveToGitHub, 1500);
-}
 
 // ═══════════════════════════════════════════════════════
 //  TABS
@@ -687,18 +911,25 @@ function doSubmit() {
       entry.media     = _formMedia.slice();
     }
   } else {
-    db.push({
-      id: Date.now(), date: isoToDisplay(dateISO), demandeur: dem,
-      refData: refData, media: _formMedia.slice(),
-      statuts: {
-        cao:  {val:'a_faire',ts:null}, prod: {val:'a_faire',ts:null},
-        be:   {val:'a_faire',ts:null}, pmi:  {val:'a_faire',ts:null}
-      }
+      const entryData = {
+    date: isoToDisplay(dateISO), demandeur: dem,
+    refData: refData, media: _formMedia.slice(),
+    statuts: { cao: {val:'a_faire',ts:null}, prod: {val:'a_faire',ts:null},
+               be: {val:'a_faire',ts:null},  pmi:  {val:'a_faire',ts:null} }
+  };
+
+  if (_editId !== null) {
+    // Édition : entry._firestoreId est l'ID Firestore
+    const entry = findEntry(_editId);
+    window.firestoreUpdate(entry._firestoreId, {
+      demandeur: dem, date: isoToDisplay(dateISO),
+      refData: refData, media: _formMedia.slice()
     });
+  } else {
+    // Création
+    window.firestoreCreate(entryData);
   }
   closeModal();
-  renderAll();
-  scheduleSave();
 }
 
 function submitForm() {
@@ -786,10 +1017,11 @@ function closeLightbox()   { document.getElementById('lightbox').classList.remov
 // ═══════════════════════════════════════════════════════
 //  HELPERS
 // ═══════════════════════════════════════════════════════
-function findEntry(id) {
-  var i;
-  for (i = 0; i < db.length; i++)      { if (db[i].id === id)      return db[i]; }
-  for (i = 0; i < archive.length; i++) { if (archive[i].id === id) return archive[i]; }
+function findEntry(firestoreId) {
+  var all = (window.dbData || []).concat(window.archiveData || []);
+  for (var i = 0; i < all.length; i++) {
+    if (all[i]._firestoreId === firestoreId) return all[i];
+  }
   return null;
 }
 function allDone(entry) {
@@ -800,46 +1032,23 @@ function allDone(entry) {
 //  RENDER ACTIF
 // ═══════════════════════════════════════════════════════
 function renderActif() {
-  var tbody = document.getElementById('tbody-actif');
-  tbody.innerHTML = '';
-  document.getElementById('cnt-actif').textContent        = db.length;
-  document.getElementById('empty-actif').style.display   = db.length === 0 ? '' : 'none';
-  document.getElementById('tbl-actif').style.display     = db.length === 0 ? 'none' : '';
+  var data = window.dbData || [];  // ← données viennent de onSnapshot()
 
-  db.forEach(function(entry, idx) {
-    var tr = document.createElement('tr');
-    tr.id  = 'row-' + entry.id;
-    var sTds = '';
-    STATUS_COLS.forEach(function(col) {
-      var s = entry.statuts[col.key];
-      sTds += '<td><div class="status-cell">'
-        + '<select class="status-select ' + (s.val === 'a_fait' ? 'done' : '') + '"'
-        + ' onchange="changeStatus(' + entry.id + ',\'' + col.key + '\',this)">'
-        + '<option value="a_faire"' + (s.val === 'a_faire' ? ' selected' : '') + '>&#192; faire</option>'
-        + '<option value="a_fait"'  + (s.val === 'a_fait'  ? ' selected' : '') + '>Fait &#10003;</option>'
-        + '</select>'
-        + (s.ts ? '<span class="status-ts">' + formatTs(s.ts) + '</span>' : '')
-        + '</div></td>';
-    });
-    var done = allDone(entry);
-    var refs = entry.refData.map(function(r) { return '<span class="badge badge-accent">' + r.ref + '</span>'; }).join('');
-    tr.innerHTML = '<td><button class="expand-btn" id="eb-' + entry.id + '" onclick="toggleDetail(' + entry.id + ')">&#9658;</button></td>'
-      + '<td class="mono" style="color:var(--text-muted)">#' + String(idx+1).padStart(3,'0') + '</td>'
-      + '<td class="mono">' + entry.date + '</td>'
-      + '<td>' + entry.demandeur + '</td>'
-      + '<td>' + refs + '</td>'
-      + sTds
-      + '<td><div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">'
-      + '<button class="btn-sm blue" onclick="openModal(' + entry.id + ')">&#9998; &#201;diter</button>'
-      + '<button class="btn-sm green"' + (done ? '' : ' disabled') + ' onclick="archiveEntry(' + entry.id + ')">Archiver</button>'
-      + '<button class="btn-sm red" onclick="deleteEntry(' + entry.id + ')">&#10005;</button>'
-      + '</div></td>';
-    tbody.appendChild(tr);
-    var dtr = document.createElement('tr');
-    dtr.id  = 'det-' + entry.id;
-    dtr.className = 'detail-row';
-    dtr.innerHTML = '<td colspan="10">' + buildDetailHTML(entry) + '</td>';
-    tbody.appendChild(dtr);
+  data.forEach(function(entry, idx) {
+    // ⚠️ Utilise entry._firestoreId partout à la place de entry.id
+    // ⚠️ Restreindre les boutons selon le rôle :
+
+    var canDelete  = window.isAdmin();
+    var canArchive = window.isAdmin();
+    var canEdit    = window.isAdmin()
+                     || (window.currentUser && entry.createdBy === window.currentUser.uid);
+
+    tr.innerHTML = '...'
+      // Bouton éditer : visible uniquement si canEdit
+      + (canEdit    ? '<button class="btn-sm blue" onclick="openModal(\'' + entry._firestoreId + '\')">✎ Éditer</button>' : '')
+      + (canArchive ? '<button class="btn-sm green" ...>Archiver</button>' : '')
+      + (canDelete  ? '<button class="btn-sm red" ...>✕</button>' : '')
+      + '...';
   });
 }
 
@@ -890,41 +1099,26 @@ function renderAll() { renderActif(); renderArchive(); }
 // ═══════════════════════════════════════════════════════
 //  ACTIONS
 // ═══════════════════════════════════════════════════════
-function changeStatus(id, col, sel) {
-  var entry = findEntry(id);
-  if (!entry) return;
-  entry.statuts[col].val = sel.value;
-  entry.statuts[col].ts  = sel.value === 'a_fait' ? Date.now() : null;
-  renderAll(); scheduleSave();
+function changeStatus(firestoreId, col, sel) {
+  var updates = {};
+  updates['statuts.' + col + '.val'] = sel.value;
+  updates['statuts.' + col + '.ts']  = sel.value === 'a_fait' ? Date.now() : null;
+  window.firestoreUpdate(firestoreId, updates);
 }
-function archiveEntry(id) {
-  var idx = -1;
-  db.forEach(function(e, i) { if (e.id === id) idx = i; });
-  if (idx === -1) return;
-  var entry = db.splice(idx, 1)[0];
-  entry.archivedAt = Date.now();
-  archive.unshift(entry);
-  renderAll(); scheduleSave();
+function archiveEntry(firestoreId) {
+  window.firestoreArchive(firestoreId);
 }
-function unarchiveEntry(id) {
-  var idx = -1;
-  archive.forEach(function(e, i) { if (e.id === id) idx = i; });
-  if (idx === -1) return;
-  var entry = archive.splice(idx, 1)[0];
-  delete entry.archivedAt;
-  db.push(entry);
-  renderAll(); scheduleSave();
+function unarchiveEntry(firestoreId) {
+  window.firestoreUnarchive(firestoreId);
 }
-function deleteEntry(id) {
-  showConfirm('Supprimer la demande', 'Cette demande sera définitivement supprimée.', 'Supprimer', function() {
-    db = db.filter(function(e) { return e.id !== id; });
-    renderAll(); scheduleSave();
+function deleteEntry(firestoreId) {
+  showConfirm('Supprimer', '...', 'Supprimer', function() {
+    window.firestoreDelete(firestoreId);
   });
 }
-function deleteArchive(id) {
-  showConfirm('Supprimer l\'archive', 'Cette entrée sera définitivement supprimée.', 'Supprimer', function() {
-    archive = archive.filter(function(e) { return e.id !== id; });
-    renderAll(); scheduleSave();
+function deleteArchive(firestoreId) {
+  showConfirm('Supprimer', '...', 'Supprimer', function() {
+    window.firestoreDeleteArchive(firestoreId);
   });
 }
 function toggleDetail(id) {
