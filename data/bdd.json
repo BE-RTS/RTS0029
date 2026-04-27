@@ -120,6 +120,37 @@
           "ts": null
         }
       }
+    },
+    {
+      "id": 1777272652576,
+      "date": "20/03/2026",
+      "demandeur": "David Perron",
+      "refData": [
+        {
+          "ref": "S16.059_A",
+          "desc": "Repère 11 n'existe pas\nRepères 8 & 9 mal positionné sur détail A\nRepère 10 manquant sur vue détail A\nPosition des 2 poulies doit être vers l'intérieur du châssis sinon le sandow frotte la vis de réglage a l'arrière du châssis",
+          "inc": "RAS"
+        }
+      ],
+      "media": [],
+      "statuts": {
+        "cao": {
+          "val": "a_faire",
+          "ts": null
+        },
+        "prod": {
+          "val": "a_faire",
+          "ts": null
+        },
+        "be": {
+          "val": "a_faire",
+          "ts": null
+        },
+        "pmi": {
+          "val": "a_faire",
+          "ts": null
+        }
+      }
     }
   ],
   "archive": []
