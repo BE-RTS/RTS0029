@@ -7,7 +7,7 @@
       "refData": [
         {
           "ref": "D06.007_B",
-          "desc": "Pion de barrette - rajout de côte sur arrondi",
+          "desc": "Pion de barrette - rajout de cÃ´te sur arrondi",
           "inc": "Utilisation stock en cours OK"
         }
       ],
@@ -21,19 +21,19 @@
       "statuts": {
         "cao": {
           "val": "a_fait",
-          "ts": 1774938435
+          "ts": 1777271311639
         },
         "prod": {
           "val": "a_fait",
-          "ts": 1774938435
+          "ts": 1777271313842
         },
         "be": {
           "val": "a_fait",
-          "ts": 1774938435
+          "ts": 1777271316253
         },
         "pmi": {
-          "val": "a_fait",
-          "ts": 1777271176139
+          "val": "a_faire",
+          "ts": null
         }
       }
     }
