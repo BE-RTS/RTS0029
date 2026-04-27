@@ -9,53 +9,43 @@
 :root {
   --accent:#AA0E10; --accent-dim:#8a0b0d; --accent-faint:rgba(170,14,16,0.09);
   --green:#2e9e5e; --green-dim:rgba(46,158,94,0.13); --red-del:#c0392b;
+  --orange:#c87d00;
   --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
 }
-[data-theme="dark"]{
+[data-theme="dark"] {
   --bg:#0f0f0f; --surface:#161616; --surface2:#1d1d1d; --surface3:#242424;
   --border:#292929; --border-light:#363636; --text:#e6e6e6; --text-dim:#888;
   --text-muted:#4f4f4f; --shadow:rgba(0,0,0,.55); --modal-bg:rgba(0,0,0,.8);
 }
-[data-theme="light"]{
+[data-theme="light"] {
   --bg:#f2f2f2; --surface:#ffffff; --surface2:#f0f0f0; --surface3:#e6e6e6;
   --border:#ddd; --border-light:#c8c8c8; --text:#1a1a1a; --text-dim:#555;
   --text-muted:#999; --shadow:rgba(0,0,0,.13); --modal-bg:rgba(0,0,0,.45);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh;transition:background .22s,color .22s}
-
-/* ── HEADER ── */
 header{border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;background:var(--surface);position:sticky;top:0;z-index:100;box-shadow:0 1px 6px var(--shadow)}
 .logo{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .logo-sub{color:var(--text-muted);font-weight:400;font-size:9.5px}
 .hdr-right{display:flex;align-items:center;gap:8px}
 .clock{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);letter-spacing:.05em;margin-right:4px}
-
-/* sync status pill */
-.sync-pill{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:3px 9px;border-radius:20px;border:1px solid var(--border-light);color:var(--text-muted);background:var(--surface2);display:flex;align-items:center;gap:5px;cursor:default;transition:all .2s}
+.sync-pill{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:3px 9px;border-radius:20px;border:1px solid var(--border-light);color:var(--text-muted);background:var(--surface2);display:flex;align-items:center;gap:5px;transition:all .2s}
 .sync-pill.ok{color:var(--green);border-color:rgba(46,158,94,.4);background:var(--green-dim)}
 .sync-pill.err{color:var(--red-del);border-color:rgba(192,57,43,.4);background:rgba(192,57,43,.08)}
 .sync-pill.saving{color:var(--accent);border-color:rgba(170,14,16,.35);background:var(--accent-faint)}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
-
 .icon-btn{background:var(--surface2);border:1px solid var(--border-light);color:var(--text-dim);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border-radius:2px;transition:all .14s}
 .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* ── TABS ── */
 .tabs{display:flex;border-bottom:1px solid var(--border);padding:0 28px;background:var(--surface)}
 .tab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px 16px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .16s;user-select:none}
 .tab:hover{color:var(--text-dim)}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-count{display:inline-block;background:var(--surface3);color:var(--text-muted);font-size:9px;padding:1px 6px;border-radius:10px;margin-left:4px}
 .tab.active .tab-count{background:var(--accent-faint);color:var(--accent)}
-
-/* ── MAIN ── */
 main{padding:22px 28px}
 .view{display:none}.view.active{display:block}
 .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .section-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
-
-/* ── BUTTONS ── */
 .btn{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:8px 15px;border:none;cursor:pointer;transition:all .13s;border-radius:2px}
 .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-dim)}
 .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border-light)}
@@ -67,8 +57,6 @@ main{padding:22px 28px}
 .btn-sm.green:disabled{opacity:.25;cursor:not-allowed;pointer-events:none}
 .btn-sm.red{color:var(--red-del);border-color:var(--red-del)}.btn-sm.red:hover{background:rgba(192,57,43,.1)}
 .btn-sm.blue{color:#4a9eff;border-color:#4a9eff}.btn-sm.blue:hover{background:rgba(74,158,255,.1)}
-
-/* ── TABLE ── */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead tr{background:var(--surface2);border-bottom:2px solid var(--border)}
@@ -77,35 +65,23 @@ tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
 tbody tr:hover{background:var(--surface2)}
 td{padding:8px 10px;vertical-align:middle;color:var(--text)}
 td.mono{font-family:var(--mono);font-size:10.5px}
-
-/* ── EXPAND BTN ── */
 .expand-btn{background:var(--surface3);border:1px solid var(--border-light);color:var(--text-dim);cursor:pointer;font-size:16px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:2px;transition:all .13s}
 .expand-btn:hover{border-color:var(--accent);color:var(--accent)}
 .expand-btn.open{color:var(--accent);border-color:var(--accent);background:var(--accent-faint)}
-
-/* ── STATUS ── */
 .status-cell{display:flex;flex-direction:column;gap:3px}
 .status-select{background:var(--surface3);color:var(--text);border:1px solid var(--border-light);font-family:var(--mono);font-size:9.5px;padding:4px 5px;cursor:pointer;outline:none;width:108px;border-radius:2px;transition:border-color .12s}
 .status-select:focus{border-color:var(--accent)}
 .status-select.done{color:var(--green);border-color:rgba(46,158,94,.45);background:var(--green-dim)}
 .status-ts{font-family:var(--mono);font-size:8.5px;color:var(--text-muted)}
-
-/* ── BADGE ── */
 .badge{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:2px;background:var(--surface3);color:var(--text-dim);margin:1px 2px 1px 0;white-space:nowrap;border:1px solid var(--border)}
 .badge-accent{background:var(--accent-faint);color:var(--accent);border-color:rgba(170,14,16,.25)}
-
-/* ── EMPTY ── */
 .empty{text-align:center;padding:52px 20px;color:var(--text-muted);font-family:var(--mono);font-size:10.5px;letter-spacing:.06em}
 .empty-icon{font-size:24px;margin-bottom:10px;opacity:.3}
-
-/* ── DETAIL ROW ── */
 .detail-row{display:none}.detail-row.open{display:table-row}
 .detail-row>td{background:var(--surface2);padding:14px 18px 18px;border-left:3px solid var(--accent)}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .detail-item label{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px}
 .detail-item p{font-size:12px;line-height:1.55;color:var(--text)}
-
-/* ── MEDIA GALLERY ── */
 .media-section{margin-top:12px}
 .media-section-lbl{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px}
 .media-gallery{display:flex;flex-wrap:wrap;gap:7px;align-items:flex-start}
@@ -119,11 +95,7 @@ td.mono{font-family:var(--mono);font-size:10.5px}
 .upload-zone{width:88px;height:66px;border:1px dashed var(--border-light);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:3px;border-radius:2px;color:var(--text-muted);font-size:20px;transition:all .12s}
 .upload-zone:hover{border-color:var(--accent);color:var(--accent)}
 .upload-zone span{font-family:var(--mono);font-size:8.5px}
-
-/* ── ARCHIVE NOTICE ── */
 .archive-notice{font-family:var(--mono);font-size:10px;color:var(--text-muted);background:var(--surface2);border:1px solid var(--border);padding:8px 13px;margin-bottom:14px;letter-spacing:.04em}
-
-/* ── MODAL ── */
 .modal-backdrop{display:none;position:fixed;inset:0;background:var(--modal-bg);z-index:200;justify-content:center;align-items:flex-start;padding:32px 14px;overflow-y:auto}
 .modal-backdrop.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border-light);width:100%;max-width:700px;border-radius:2px;box-shadow:0 8px 40px var(--shadow);animation:slideUp .17s ease}
@@ -134,8 +106,6 @@ td.mono{font-family:var(--mono);font-size:10.5px}
 .modal-close:hover{color:var(--text)}
 .modal-body{padding:20px}
 .modal-footer{padding:13px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px}
-
-/* ── FORM ── */
 .form-group{margin-bottom:16px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .form-label{display:block;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px}
@@ -147,89 +117,56 @@ td.mono{font-family:var(--mono);font-size:10.5px}
 input[type="date"].form-input::-webkit-calendar-picker-indicator{filter:invert(0.5)}
 [data-theme="light"] input[type="date"].form-input::-webkit-calendar-picker-indicator{filter:invert(0.2)}
 .sep{border:none;border-top:1px solid var(--border);margin:16px 0}
-
-/* refs */
+.hint{font-family:var(--mono);font-size:9px;color:var(--text-muted);margin-top:3px}
+.hint-a{color:var(--accent)}
 .refs-container{display:flex;flex-direction:column;gap:5px;margin-top:7px}
 .ref-row{display:flex;gap:7px;align-items:flex-start;background:var(--surface2);border:1px solid var(--border);padding:6px 8px;border-radius:2px}
 .ref-input-wrap{flex:1}
-.ref-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border-light);color:var(--text);font-family:var(--mono);font-size:12px;padding:3px 2px;outline:none;transition:border-color .12s;text-transform:uppercase}
+.ref-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border-light);color:var(--text);font-family:var(--mono);font-size:12px;padding:3px 2px;outline:none;transition:border-color .12s}
 .ref-input:focus{border-bottom-color:var(--accent)}
-.ref-input.invalid{border-bottom-color:var(--red-del)}
-.ref-err{font-family:var(--mono);font-size:8.5px;color:var(--red-del);margin-top:3px;display:none}
+.ref-input.warn{border-bottom-color:var(--orange)}
+.ref-warn{font-family:var(--mono);font-size:8.5px;color:var(--orange);margin-top:3px;display:none}
 .ref-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:0 2px;line-height:1;transition:color .12s;flex-shrink:0}
 .ref-remove:hover{color:var(--red-del)}
 .add-ref-btn{width:100%;margin-top:5px;background:none;border:1px dashed var(--border-light);color:var(--text-muted);font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;padding:6px 9px;cursor:pointer;transition:all .12s;text-align:left;border-radius:2px}
 .add-ref-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* checkbox */
 .check-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
 input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:pointer}
 .check-lbl{font-family:var(--mono);font-size:9.5px;color:var(--text-dim);cursor:pointer}
-
-/* per-ref */
 .per-ref-block{display:flex;flex-direction:column;gap:7px;margin-top:5px}
 .per-ref-item{background:var(--surface2);border-left:2px solid var(--border-light);padding:8px 10px;border-radius:0 2px 2px 0}
 .per-ref-lbl{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.08em;margin-bottom:4px}
 .per-ref-ta{width:100%;background:var(--surface);border:1px solid var(--border-light);color:var(--text);font-family:var(--sans);font-size:12.5px;padding:6px 8px;outline:none;resize:vertical;min-height:52px;border-radius:2px;transition:border-color .12s}
 .per-ref-ta:focus{border-color:var(--accent)}
-
-.hint{font-family:var(--mono);font-size:9px;color:var(--text-muted);margin-top:3px}
-.hint-a{color:var(--accent)}
-
-/* ── SETTINGS PANEL ── */
-.settings-panel{display:none;position:fixed;inset:0;background:var(--modal-bg);z-index:300;justify-content:center;align-items:flex-start;padding:32px 14px;overflow-y:auto}
-.settings-panel.open{display:flex}
-.settings-box{background:var(--surface);border:1px solid var(--border-light);width:100%;max-width:580px;border-radius:2px;box-shadow:0 8px 40px var(--shadow);animation:slideUp .17s ease}
-.settings-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.settings-title{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
-.settings-body{padding:20px}
-.settings-section{margin-bottom:20px}
-.settings-section-title{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.step-block{background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:12px 14px;margin-bottom:8px}
-.step-num{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:600;letter-spacing:.08em;margin-bottom:4px}
-.step-text{font-size:12.5px;color:var(--text-dim);line-height:1.55}
-.step-text code{font-family:var(--mono);font-size:11px;background:var(--surface3);padding:1px 5px;border-radius:2px;color:var(--text)}
-.settings-footer{padding:13px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px}
-.test-result{font-family:var(--mono);font-size:10px;margin-top:8px;padding:6px 10px;border-radius:2px;display:none}
-.test-result.ok{background:var(--green-dim);color:var(--green);border:1px solid rgba(46,158,94,.3)}
-.test-result.err{background:rgba(192,57,43,.08);color:var(--red-del);border:1px solid rgba(192,57,43,.3)}
-
-/* ── LIGHTBOX ── */
 .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:400;align-items:center;justify-content:center}
 .lightbox.open{display:flex}
 .lightbox img{max-width:90vw;max-height:88vh;object-fit:contain;border:1px solid #333}
 .lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#aaa;font-size:26px;cursor:pointer;line-height:1}
 .lb-close:hover{color:#fff}
-
-/* ── CONFIRM ── */
 .confirm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center}
 .confirm-bg.open{display:flex}
-.confirm-box{background:var(--surface);border:1px solid var(--border-light);padding:24px 26px;width:320px;border-radius:2px;box-shadow:0 6px 30px var(--shadow)}
-.confirm-title{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--red-del);margin-bottom:9px}
-.confirm-msg{font-size:12.5px;color:var(--text-dim);line-height:1.5;margin-bottom:18px}
+.confirm-box{background:var(--surface);border:1px solid var(--border-light);padding:24px 26px;width:340px;border-radius:2px;box-shadow:0 6px 30px var(--shadow)}
+.confirm-title{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
+.confirm-msg{font-size:12.5px;color:var(--text-dim);line-height:1.6;margin-bottom:18px;white-space:pre-wrap}
 .confirm-btns{display:flex;gap:9px;justify-content:flex-end}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">PLAN<span style="color:var(--border-light);font-weight:300">—</span>MANAGER <span class="logo-sub">// Suivi mises à jour</span></div>
   <div class="hdr-right">
     <div class="clock" id="clock"></div>
-    <div class="sync-pill" id="sync-pill" title="Statut synchronisation GitHub"><span class="sync-dot"></span><span id="sync-text">Non configuré</span></div>
-    <button class="icon-btn" id="theme-btn" title="Basculer thème" onclick="toggleTheme()">🌙</button>
-    <button class="icon-btn" title="Paramètres GitHub" onclick="openSettings()">⚙</button>
+    <div class="sync-pill" id="sync-pill"><span class="sync-dot"></span><span id="sync-text">Connexion…</span></div>
+    <button class="icon-btn" id="theme-btn" title="Basculer thème" onclick="toggleTheme()">☀️</button>
   </div>
 </header>
 
-<!-- TABS -->
 <div class="tabs">
   <div class="tab active" data-tab="actif">En cours <span class="tab-count" id="cnt-actif">0</span></div>
   <div class="tab" data-tab="archive">Archives <span class="tab-count" id="cnt-archive">0</span></div>
 </div>
 
-<!-- MAIN -->
 <main>
   <div class="view active" id="view-actif">
     <div class="toolbar">
@@ -237,7 +174,7 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       <button class="btn btn-primary" onclick="openModal()">+ Nouvelle demande</button>
     </div>
     <div class="table-wrap">
-      <table id="tbl-actif">
+      <table id="tbl-actif" style="display:none">
         <thead><tr>
           <th style="width:38px"></th><th>#</th><th>Date</th><th>Demandeur</th><th>Référence(s)</th>
           <th>CAO mise à jour</th><th>Validation production</th><th>Validation B.E.</th><th>Mise à jour PMI</th>
@@ -251,9 +188,9 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
 
   <div class="view" id="view-archive">
     <div class="toolbar"><div class="section-label">Demandes archivées</div></div>
-    <div class="archive-notice">Lecture seule — tous les workflows ont été complétés. Vous pouvez désarchiver une entrée pour la modifier.</div>
+    <div class="archive-notice">Lecture seule. Désarchiver une entrée pour la modifier.</div>
     <div class="table-wrap">
-      <table id="tbl-archive">
+      <table id="tbl-archive" style="display:none">
         <thead><tr>
           <th style="width:38px"></th><th>#</th><th>Date</th><th>Demandeur</th><th>Référence(s)</th>
           <th>CAO</th><th>Prod.</th><th>B.E.</th><th>PMI</th><th>Archivé le</th><th>Actions</th>
@@ -265,11 +202,10 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
   </div>
 </main>
 
-<!-- ══ MODAL FORMULAIRE (création + édition) ══ -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-title">Nouvelle demande de mise à jour</div>
+      <div class="modal-title" id="modal-title">Nouvelle demande</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -290,7 +226,7 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       <hr class="sep">
       <div class="form-group">
         <label class="form-label">Référence(s) avec indice</label>
-        <div class="hint">Format : <span class="hint-a">D00.000_A</span> ou <span class="hint-a">S00.000_...</span> — le « _ » est ajouté automatiquement. Majuscules automatiques.</div>
+        <div class="hint">Format : <span class="hint-a">D00.000_A</span> ou <span class="hint-a">S00.000_...</span> — majuscules auto, underscore ajouté si absent.</div>
         <div class="refs-container" id="refs-container"></div>
         <button class="add-ref-btn" onclick="addRefRow()">+ Ajouter une référence</button>
       </div>
@@ -318,12 +254,9 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
         <div id="inc-per-block" class="per-ref-block" style="display:none"></div>
       </div>
       <hr class="sep">
-      <!-- MÉDIAS à la création -->
       <div class="form-group">
         <label class="form-label">Médias joints (images, PDF)</label>
-        <div class="media-gallery" id="form-media-gallery">
-          <div class="upload-zone" onclick="document.getElementById('form-media-in').click()"><span>＋</span><span>Ajouter</span></div>
-        </div>
+        <div class="media-gallery" id="form-media-gallery"></div>
         <input type="file" id="form-media-in" accept="image/*,.pdf" multiple style="display:none" onchange="handleFormMedia(event)">
       </div>
     </div>
@@ -334,767 +267,685 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
   </div>
 </div>
 
-<!-- ══ SETTINGS ══ -->
-<div class="settings-panel" id="settings-panel">
-  <div class="settings-box">
-    <div class="settings-header">
-      <div class="settings-title">⚙ Configuration GitHub</div>
-      <button class="modal-close" onclick="closeSettings()">✕</button>
-    </div>
-    <div class="settings-body">
-
-      <div class="settings-section">
-        <div class="settings-section-title">Instructions — Créer un Personal Access Token</div>
-        <div class="step-block"><div class="step-num">ÉTAPE 1</div><div class="step-text">Connectez-vous sur <strong>github.com</strong> puis allez dans :<br><code>Settings → Developer settings → Personal access tokens → Fine-grained tokens</code></div></div>
-        <div class="step-block"><div class="step-num">ÉTAPE 2</div><div class="step-text">Cliquez sur <code>Generate new token</code>. Donnez-lui un nom (ex: <code>plan-manager</code>), une expiration, et sélectionnez votre repo dans <strong>Repository access</strong>.</div></div>
-        <div class="step-block"><div class="step-num">ÉTAPE 3</div><div class="step-text">Dans <strong>Permissions → Repository permissions</strong>, activez <code>Contents → Read and write</code>.</div></div>
-        <div class="step-block"><div class="step-num">ÉTAPE 4</div><div class="step-text">Cliquez <code>Generate token</code>, copiez le token (il ne sera affiché qu'une seule fois) et collez-le ci-dessous.</div></div>
-      </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title">Paramètres de connexion</div>
-        <div class="form-group">
-          <label class="form-label">Nom d'utilisateur GitHub</label>
-          <input class="form-input" type="text" id="cfg-user" placeholder="ex: moncompte">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nom du repository</label>
-          <input class="form-input" type="text" id="cfg-repo" placeholder="ex: mon-repo">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Branche</label>
-          <input class="form-input" type="text" id="cfg-branch" placeholder="main" value="main">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Personal Access Token</label>
-          <input class="form-input" type="password" id="cfg-token" placeholder="github_pat_…">
-        </div>
-        <div class="test-result" id="test-result"></div>
-      </div>
-    </div>
-    <div class="settings-footer">
-      <button class="btn btn-ghost" onclick="testConnection()">Tester la connexion</button>
-      <button class="btn btn-ghost" onclick="closeSettings()">Fermer</button>
-      <button class="btn btn-primary" onclick="saveSettings()">Enregistrer</button>
-    </div>
-  </div>
-</div>
-
-<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lb-close">✕</button>
   <img id="lb-img" src="" alt="">
 </div>
 
-<!-- CONFIRM -->
 <div class="confirm-bg" id="confirm-bg">
   <div class="confirm-box">
-    <div class="confirm-title" id="confirm-title">Confirmation</div>
+    <div class="confirm-title" id="confirm-title"></div>
     <div class="confirm-msg" id="confirm-msg"></div>
     <div class="confirm-btns">
       <button class="btn btn-ghost" onclick="confirmCancel()">Annuler</button>
-      <button class="btn btn-primary" id="confirm-ok" style="background:var(--red-del)" onclick="confirmOk()">Supprimer</button>
+      <button class="btn" id="confirm-ok" onclick="confirmOk()">OK</button>
     </div>
   </div>
 </div>
 
-<!-- hidden inputs -->
-<input type="file" id="media-in" accept="image/*,.pdf" multiple style="display:none" onchange="handleDetailMedia(event)">
-
 <script>
-// ══════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════
-let db = [], archive = [];
-let _confirmCb = null, _detailMediaId = null;
-let _editId = null;          // null = création, sinon id de l'entrée à éditer
-let _formMedia = [];         // médias temporaires pendant la création/édition
+// ═══════════════════════════════════════════════════════
+//  CONFIG GITHUB — remplacer ces valeurs
+// ═══════════════════════════════════════════════════════
+var GH_USER   = 'GITHUB_USER';
+var GH_REPO   = 'GITHUB_REPO';
+var GH_BRANCH = 'main';
+var GH_TOKEN  = 'GITHUB_TOKEN';
+var GH_FILE   = 'data/bdd.json';
 
-const STATUS_COLS = [
-  {key:'cao', label:'CAO mise à jour'},
-  {key:'prod',label:'Validation production'},
-  {key:'be',  label:'Validation B.E.'},
-  {key:'pmi', label:'Mise à jour PMI'},
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+var db = [];
+var archive = [];
+var _ghSha = null;
+var _saveTimer = null;
+var _confirmCb = null;
+var _editId = null;
+var _formMedia = [];
+
+var STATUS_COLS = [
+  {key:'cao',  label:'CAO mise à jour'},
+  {key:'prod', label:'Validation production'},
+  {key:'be',   label:'Validation B.E.'},
+  {key:'pmi',  label:'Mise à jour PMI'}
 ];
 
-// ══════════════════════════════════════════════
+var REF_RX       = /^[DS]\d{2}\.\d{3}_([A-Z]|\.\.\.)$/;
+var REF_RX_LOOSE = /^[DS]\d{2}\.\d{3}_?([A-Z]|\.\.\.)$/;
+
+// ═══════════════════════════════════════════════════════
 //  THEME
-// ══════════════════════════════════════════════
-function toggleTheme(){
-  const h = document.documentElement;
-  const dark = h.getAttribute('data-theme') === 'dark';
-  h.setAttribute('data-theme', dark ? 'light' : 'dark');
+// ═══════════════════════════════════════════════════════
+function toggleTheme() {
+  var html = document.documentElement;
+  var dark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', dark ? 'light' : 'dark');
   document.getElementById('theme-btn').textContent = dark ? '🌙' : '☀️';
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  CLOCK
-// ══════════════════════════════════════════════
-function pad(n){return String(n).padStart(2,'0')}
-function formatDate(d){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
-function formatTs(ts){return ts?formatDate(new Date(ts)):''}
-function todayISO(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
-function isoToDisplay(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return d+'/'+m+'/'+y}
-function displayToISO(disp){if(!disp)return'';const[d,m,y]=disp.split('/');return y+'-'+m+'-'+d}
-(function tick(){
-  const n=new Date();
-  document.getElementById('clock').textContent=formatDate(n)+' · '+n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-  setTimeout(tick,1000);
+// ═══════════════════════════════════════════════════════
+function pad(n) { return String(n).padStart(2, '0'); }
+function formatDate(d) { return pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '/' + d.getFullYear(); }
+function formatTs(ts)  { return ts ? formatDate(new Date(ts)) : ''; }
+function todayISO() {
+  var d = new Date();
+  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+}
+function isoToDisplay(iso) {
+  if (!iso) return '';
+  var p = iso.split('-');
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+function displayToISO(disp) {
+  if (!disp) return '';
+  var p = disp.split('/');
+  return p[2] + '-' + p[1] + '-' + p[0];
+}
+(function tick() {
+  var n = new Date();
+  document.getElementById('clock').textContent = formatDate(n) + ' · ' + n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  setTimeout(tick, 1000);
 })();
 
-// ══════════════════════════════════════════════
-//  GITHUB CONFIG
-// ══════════════════════════════════════════════
-const CFG_KEY = 'planmgr_github_cfg';
-let ghCfg = {};
-
-function loadCfg(){
-  try{ghCfg=JSON.parse(localStorage.getItem(CFG_KEY))||{};}catch{ghCfg={};}
-  return ghCfg;
-}
-function saveCfg(){localStorage.setItem(CFG_KEY,JSON.stringify(ghCfg));}
-function cfgOk(){return ghCfg.user && ghCfg.repo && ghCfg.token;}
-
-loadCfg();
-
-function openSettings(){
-  document.getElementById('cfg-user').value   = ghCfg.user   ||'';
-  document.getElementById('cfg-repo').value   = ghCfg.repo   ||'';
-  document.getElementById('cfg-branch').value = ghCfg.branch ||'main';
-  document.getElementById('cfg-token').value  = ghCfg.token  ||'';
-  document.getElementById('test-result').style.display='none';
-  document.getElementById('settings-panel').classList.add('open');
-}
-function closeSettings(){document.getElementById('settings-panel').classList.remove('open');}
-function saveSettings(){
-  ghCfg={
-    user:  document.getElementById('cfg-user').value.trim(),
-    repo:  document.getElementById('cfg-repo').value.trim(),
-    branch:document.getElementById('cfg-branch').value.trim()||'main',
-    token: document.getElementById('cfg-token').value.trim(),
-  };
-  saveCfg();
-  closeSettings();
-  updateSyncPill('idle');
-  // Essaie de charger la BDD depuis GitHub
-  if(cfgOk()) loadFromGitHub();
-}
-async function testConnection(){
-  const user  = document.getElementById('cfg-user').value.trim();
-  const repo  = document.getElementById('cfg-repo').value.trim();
-  const token = document.getElementById('cfg-token').value.trim();
-  const branch= document.getElementById('cfg-branch').value.trim()||'main';
-  const res   = document.getElementById('test-result');
-  res.style.display='none';
-  if(!user||!repo||!token){res.className='test-result err';res.textContent='⚠ Veuillez remplir tous les champs.';res.style.display='';return;}
-  try{
-    const r = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/data/bdd.json?ref=${branch}`,
-      {headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
-    if(r.status===200||r.status===404){
-      res.className='test-result ok';
-      res.textContent='✓ Connexion réussie au repo '+user+'/'+repo+(r.status===404?' (fichier bdd.json sera créé automatiquement)':'');
-    }else{
-      const j=await r.json();
-      res.className='test-result err';
-      res.textContent='✗ Erreur '+r.status+' : '+(j.message||'Vérifiez les paramètres et le token.');
-    }
-  }catch(e){
-    res.className='test-result err';
-    res.textContent='✗ Erreur réseau : '+e.message;
-  }
-  res.style.display='';
-}
-
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  SYNC PILL
-// ══════════════════════════════════════════════
-function updateSyncPill(state, msg){
-  const pill = document.getElementById('sync-pill');
-  const txt  = document.getElementById('sync-text');
+// ═══════════════════════════════════════════════════════
+function updateSyncPill(state, msg) {
+  var pill = document.getElementById('sync-pill');
+  var txt  = document.getElementById('sync-text');
   pill.className = 'sync-pill';
-  if(state==='ok')    {pill.classList.add('ok');     txt.textContent=msg||'Synchronisé';}
-  else if(state==='err')  {pill.classList.add('err');    txt.textContent=msg||'Erreur sync';}
-  else if(state==='saving'){pill.classList.add('saving'); txt.textContent='Sauvegarde…';}
-  else                     {txt.textContent=msg||'Non configuré';}
+  if (state === 'ok')      { pill.classList.add('ok');     txt.textContent = msg || 'Synchronisé'; }
+  else if (state === 'err')     { pill.classList.add('err');    txt.textContent = msg || 'Erreur sync'; }
+  else if (state === 'saving')  { pill.classList.add('saving'); txt.textContent = 'Sauvegarde…'; }
+  else                          { txt.textContent = msg || ''; }
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  GITHUB I/O
-// ══════════════════════════════════════════════
-const GH_FILE = 'data/bdd.json';
-let _ghSha = null;   // SHA du fichier pour les updates
+// ═══════════════════════════════════════════════════════
+function ghHeaders() {
+  return {
+    'Authorization': 'Bearer ' + GH_TOKEN,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json'
+  };
+}
 
-async function loadFromGitHub(){
-  if(!cfgOk()){updateSyncPill('idle','Non configuré');return;}
-  updateSyncPill('saving','Chargement…');
-  try{
-    const r = await fetch(
-      `https://api.github.com/repos/${ghCfg.user}/${ghCfg.repo}/contents/${GH_FILE}?ref=${ghCfg.branch}`,
-      {headers:{'Authorization':'Bearer '+ghCfg.token,'Accept':'application/vnd.github+json'}});
-    if(r.status===404){
-      // Fichier n'existe pas encore, BDD vide
-      _ghSha=null; db=[]; archive=[];
-      updateSyncPill('ok','Prêt (nouveau fichier)');
-      renderAll(); return;
+function loadFromGitHub() {
+  updateSyncPill('saving', 'Chargement…');
+  fetch('https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/' + GH_FILE + '?ref=' + GH_BRANCH, {
+    headers: ghHeaders()
+  })
+  .then(function(r) {
+    if (r.status === 404) {
+      _ghSha = null; db = []; archive = [];
+      updateSyncPill('ok', 'Prêt (BDD vide)');
+      renderAll();
+      return null;
     }
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const j = await r.json();
+    if (!r.ok) { return r.json().then(function(j) { throw new Error('HTTP ' + r.status + ' — ' + (j.message||'')); }); }
+    return r.json();
+  })
+  .then(function(j) {
+    if (!j) return;
     _ghSha = j.sha;
-    const decoded = JSON.parse(atob(j.content.replace(/\n/g,'')));
+    var decoded = JSON.parse(atob(j.content.replace(/\n/g, '')));
     db      = decoded.actif   || [];
     archive = decoded.archive || [];
-    updateSyncPill('ok', 'Synchronisé · '+formatDate(new Date()));
+    updateSyncPill('ok', 'Synchronisé · ' + formatDate(new Date()));
     renderAll();
-  }catch(e){
-    updateSyncPill('err','Erreur chargement');
-    console.error('GitHub load error',e);
-  }
+  })
+  .catch(function(e) {
+    updateSyncPill('err', 'Erreur chargement');
+    console.error('GH load:', e);
+  });
 }
 
-async function saveToGitHub(){
-  if(!cfgOk()){return;}
+function saveToGitHub() {
   updateSyncPill('saving');
-  try{
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify({actif:db,archive},null,2))));
-    const body = {
-      message:'chore: mise à jour BDD plans — '+new Date().toISOString(),
-      content,
-      branch: ghCfg.branch||'main',
-    };
-    if(_ghSha) body.sha = _ghSha;
-    const r = await fetch(
-      `https://api.github.com/repos/${ghCfg.user}/${ghCfg.repo}/contents/${GH_FILE}`,
-      {method:'PUT',headers:{'Authorization':'Bearer '+ghCfg.token,'Content-Type':'application/json','Accept':'application/vnd.github+json'},
-       body:JSON.stringify(body)});
-    if(!r.ok){const j=await r.json();throw new Error(j.message);}
-    const j = await r.json();
+  var payload = JSON.stringify({actif: db, archive: archive}, null, 2);
+  var encoded = btoa(unescape(encodeURIComponent(payload)));
+  var body = { message: 'chore: maj BDD plans', content: encoded, branch: GH_BRANCH };
+  if (_ghSha) body.sha = _ghSha;
+  fetch('https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/' + GH_FILE, {
+    method: 'PUT',
+    headers: ghHeaders(),
+    body: JSON.stringify(body)
+  })
+  .then(function(r) {
+    if (!r.ok) { return r.json().then(function(j) { throw new Error(j.message); }); }
+    return r.json();
+  })
+  .then(function(j) {
     _ghSha = j.content.sha;
-    updateSyncPill('ok','Synchronisé · '+formatDate(new Date()));
-  }catch(e){
-    updateSyncPill('err','Erreur sauvegarde');
-    console.error('GitHub save error',e);
-  }
+    updateSyncPill('ok', 'Synchronisé · ' + formatDate(new Date()));
+  })
+  .catch(function(e) {
+    updateSyncPill('err', 'Erreur sauvegarde');
+    console.error('GH save:', e);
+  });
 }
 
-// Sauvegarde avec debounce 1.5s pour éviter trop d'appels
-let _saveTimer = null;
-function scheduleSave(){
+function scheduleSave() {
   clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(()=>saveToGitHub(), 1500);
+  _saveTimer = setTimeout(saveToGitHub, 1500);
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  TABS
-// ══════════════════════════════════════════════
-document.querySelectorAll('.tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('.tab').forEach(function(t) {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
+    document.querySelectorAll('.view').forEach(function(x) { x.classList.remove('active'); });
     t.classList.add('active');
-    document.getElementById('view-'+t.dataset.tab).classList.add('active');
+    document.getElementById('view-' + t.dataset.tab).classList.add('active');
   });
 });
 
-// ══════════════════════════════════════════════
-//  REF NORMALIZATION
-//  Accepte: [DS]00.000[_]?[A-Z...]  majuscules auto, _ facultatif
-// ══════════════════════════════════════════════
-// Normalise en temps réel (majuscules + insertion du _)
-function normalizeRefInput(inp){
-  let v = inp.value.toUpperCase();
-  // Ajoute _ si manquant avant l'indice: X00.000A → X00.000_A
-  v = v.replace(/^([DS]\d{2}\.\d{3})([A-Z]|\.\.\.)$/, '$1_$2');
-  if(inp.value !== v) inp.value = v;
-}
-
-const REF_RX = /^[DS]\d{2}\.\d{3}_([A-Z]|\.\.\.)$/;
-// Accepte aussi sans underscore lors de la validation (on normalise avant)
-const REF_RX_LOOSE = /^[DS]\d{2}\.\d{3}_?([A-Z]|\.\.\.)$/;
-
-function normalizeRef(v){
+// ═══════════════════════════════════════════════════════
+//  REF HELPERS
+// ═══════════════════════════════════════════════════════
+function normalizeRef(v) {
   v = v.toUpperCase().trim();
-  // Insère _ si absent entre les 3 chiffres et l'indice
   v = v.replace(/^([DS]\d{2}\.\d{3})([A-Z]|\.\.\.)$/, '$1_$2');
   return v;
 }
-function validRef(v){ return REF_RX.test(normalizeRef(v)); }
+function validRef(v) { return REF_RX.test(normalizeRef(v)); }
 
-// ══════════════════════════════════════════════
-//  MODAL (création + édition)
-// ══════════════════════════════════════════════
-function openModal(editId=null){
-  _editId = editId;
+// ═══════════════════════════════════════════════════════
+//  MODAL
+// ═══════════════════════════════════════════════════════
+function openModal(editId) {
+  _editId = (editId !== undefined) ? editId : null;
   _formMedia = [];
+  var isEdit = _editId !== null;
+  document.getElementById('modal-title').textContent        = isEdit ? 'Modifier la demande' : 'Nouvelle demande';
+  document.getElementById('modal-submit-btn').textContent   = isEdit ? 'Mettre à jour' : 'Enregistrer';
+  document.getElementById('desc-global-block').style.display = '';
+  document.getElementById('desc-per-block').style.display   = 'none';
+  document.getElementById('inc-global-block').style.display  = '';
+  document.getElementById('inc-per-block').style.display    = 'none';
+  document.getElementById('desc-per-block').innerHTML = '';
+  document.getElementById('inc-per-block').innerHTML  = '';
+  document.getElementById('refs-container').innerHTML = '';
 
-  const isEdit = editId !== null;
-  document.getElementById('modal-title').textContent = isEdit ? 'Modifier la demande' : 'Nouvelle demande de mise à jour';
-  document.getElementById('modal-submit-btn').textContent = isEdit ? 'Mettre à jour' : 'Enregistrer';
-
-  if(isEdit){
-    const entry = [...db,...archive].find(e=>e.id===editId);
-    if(!entry)return;
+  if (isEdit) {
+    var entry = findEntry(_editId);
+    if (!entry) return;
     document.getElementById('f-dem').value  = entry.demandeur;
     document.getElementById('f-date').value = displayToISO(entry.date);
-
-    // Refs
-    document.getElementById('refs-container').innerHTML='';
-    entry.refData.forEach(rd=>addRefRow(rd.ref));
-
-    // Desc / Inc
-    const descSame = entry.refData.every(r=>r.desc===entry.refData[0].desc);
-    const incSame  = entry.refData.every(r=>r.inc ===entry.refData[0].inc);
+    entry.refData.forEach(function(rd) { addRefRow(rd.ref); });
+    var descSame = entry.refData.every(function(r) { return r.desc === entry.refData[0].desc; });
+    var incSame  = entry.refData.every(function(r) { return r.inc  === entry.refData[0].inc;  });
     document.getElementById('f-desc-same').checked = descSame;
     document.getElementById('f-inc-same').checked  = incSame;
-    if(descSame){
-      document.getElementById('desc-global-block').style.display='';
-      document.getElementById('desc-per-block').style.display='none';
-      document.getElementById('f-desc-global').value = entry.refData[0].desc||'';
-    }else{
-      document.getElementById('desc-global-block').style.display='none';
-      document.getElementById('desc-per-block').style.display='';
-      buildPerRef('desc-per-block',entry.refData.map(r=>r.ref),'desc');
-      entry.refData.forEach(rd=>{
-        const ta=document.querySelector(`#desc-per-block textarea[data-ref="${rd.ref}"]`);
-        if(ta) ta.value=rd.desc||'';
+    if (descSame) {
+      document.getElementById('f-desc-global').value = entry.refData[0].desc || '';
+    } else {
+      document.getElementById('desc-global-block').style.display = 'none';
+      document.getElementById('desc-per-block').style.display = '';
+      buildPerRef('desc-per-block', entry.refData.map(function(r) { return r.ref; }), 'desc');
+      entry.refData.forEach(function(rd) {
+        var ta = document.querySelector('#desc-per-block textarea[data-ref="' + rd.ref + '"]');
+        if (ta) ta.value = rd.desc || '';
       });
     }
-    if(incSame){
-      document.getElementById('inc-global-block').style.display='';
-      document.getElementById('inc-per-block').style.display='none';
-      document.getElementById('f-inc-global').value = entry.refData[0].inc||'';
-    }else{
-      document.getElementById('inc-global-block').style.display='none';
-      document.getElementById('inc-per-block').style.display='';
-      buildPerRef('inc-per-block',entry.refData.map(r=>r.ref),'inc');
-      entry.refData.forEach(rd=>{
-        const ta=document.querySelector(`#inc-per-block textarea[data-ref="${rd.ref}"]`);
-        if(ta) ta.value=rd.inc||'';
+    if (incSame) {
+      document.getElementById('f-inc-global').value = entry.refData[0].inc || '';
+    } else {
+      document.getElementById('inc-global-block').style.display = 'none';
+      document.getElementById('inc-per-block').style.display = '';
+      buildPerRef('inc-per-block', entry.refData.map(function(r) { return r.ref; }), 'inc');
+      entry.refData.forEach(function(rd) {
+        var ta = document.querySelector('#inc-per-block textarea[data-ref="' + rd.ref + '"]');
+        if (ta) ta.value = rd.inc || '';
       });
     }
-
-    // Médias existants
-    _formMedia = entry.media ? [...entry.media] : [];
+    _formMedia = entry.media ? entry.media.slice() : [];
   } else {
-    document.getElementById('f-date').value = todayISO();
-    document.getElementById('f-dem').value  = '';
-    document.getElementById('f-desc-global').value='';
-    document.getElementById('f-inc-global').value='';
-    document.getElementById('f-desc-same').checked=true;
-    document.getElementById('f-inc-same').checked=true;
-    document.getElementById('desc-global-block').style.display='';
-    document.getElementById('desc-per-block').style.display='none';
-    document.getElementById('inc-global-block').style.display='';
-    document.getElementById('inc-per-block').style.display='none';
-    document.getElementById('refs-container').innerHTML='';
+    document.getElementById('f-date').value        = todayISO();
+    document.getElementById('f-dem').value         = '';
+    document.getElementById('f-desc-global').value = '';
+    document.getElementById('f-inc-global').value  = '';
+    document.getElementById('f-desc-same').checked = true;
+    document.getElementById('f-inc-same').checked  = true;
     addRefRow();
   }
-
   renderFormMedia();
   document.getElementById('modal-backdrop').classList.add('open');
 }
 
-function closeModal(){document.getElementById('modal-backdrop').classList.remove('open');_formMedia=[];}
-document.getElementById('modal-backdrop').addEventListener('click',e=>{
-  if(e.target===document.getElementById('modal-backdrop'))closeModal();
+function closeModal() {
+  document.getElementById('modal-backdrop').classList.remove('open');
+  _formMedia = [];
+}
+document.getElementById('modal-backdrop').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('modal-backdrop')) closeModal();
 });
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  REFS
-// ══════════════════════════════════════════════
-function addRefRow(value=''){
-  const c=document.getElementById('refs-container');
-  const row=document.createElement('div');row.className='ref-row';
-  row.innerHTML=`<div class="ref-input-wrap">
-    <input type="text" class="ref-input mono-f" placeholder="D00.000_A ou S00.000_..."
-      value="${value}" oninput="onRefInput(this)" onblur="onRefBlur(this)">
-    <div class="ref-err">Format invalide. Ex : D12.345_A ou S07.123_...</div>
-  </div>
-  <button class="ref-remove" onclick="removeRefRow(this)">×</button>`;
-  c.appendChild(row);refreshPerRef();
-}
-function removeRefRow(btn){
-  const c=document.getElementById('refs-container');
-  if(c.children.length<=1)return;
-  btn.closest('.ref-row').remove();refreshPerRef();
-}
-function onRefInput(inp){
-  // Majuscules en temps réel
-  const pos=inp.selectionStart;
-  inp.value=inp.value.toUpperCase();
-  inp.setSelectionRange(pos,pos);
-  // Validation visuelle
-  const v=inp.value.trim();
-  const err=inp.nextElementSibling;
-  if(!v){inp.classList.remove('invalid');err.style.display='none';}
-  else if(!REF_RX_LOOSE.test(normalizeRef(v))){inp.classList.add('invalid');err.style.display='';}
-  else{inp.classList.remove('invalid');err.style.display='none';}
+// ═══════════════════════════════════════════════════════
+function addRefRow(value) {
+  value = value || '';
+  var c   = document.getElementById('refs-container');
+  var row = document.createElement('div');
+  row.className = 'ref-row';
+  row.innerHTML = '<div class="ref-input-wrap">'
+    + '<input type="text" class="ref-input mono-f" placeholder="D00.000_A ou S00.000_..."'
+    + ' value="' + value + '" oninput="onRefInput(this)" onblur="onRefBlur(this)">'
+    + '<div class="ref-warn">&#9888; Format inhabituel — vous pourrez quand même valider.</div>'
+    + '</div>'
+    + '<button class="ref-remove" onclick="removeRefRow(this)">&#215;</button>';
+  c.appendChild(row);
   refreshPerRef();
 }
-function onRefBlur(inp){
-  // Normalise (ajoute le _ si manquant) au blur
-  if(inp.value.trim()) inp.value = normalizeRef(inp.value);
+
+function removeRefRow(btn) {
+  var c = document.getElementById('refs-container');
+  if (c.children.length <= 1) return;
+  btn.closest('.ref-row').remove();
+  refreshPerRef();
 }
-function getRefs(){
-  return [...document.querySelectorAll('#refs-container .ref-input')]
-    .map(i=>normalizeRef(i.value)).filter(v=>v&&validRef(v));
+
+function onRefInput(inp) {
+  var pos = inp.selectionStart;
+  inp.value = inp.value.toUpperCase();
+  try { inp.setSelectionRange(pos, pos); } catch(e) {}
+  var v    = inp.value.trim();
+  var warn = inp.parentNode.querySelector('.ref-warn');
+  if (!v) {
+    inp.classList.remove('warn'); warn.style.display = 'none';
+  } else if (!REF_RX_LOOSE.test(normalizeRef(v))) {
+    inp.classList.add('warn'); warn.style.display = '';
+  } else {
+    inp.classList.remove('warn'); warn.style.display = 'none';
+  }
+  refreshPerRef();
 }
-function refreshPerRef(){
-  const refs=getRefs();
-  if(!document.getElementById('f-desc-same').checked) buildPerRef('desc-per-block',refs,'desc');
-  if(!document.getElementById('f-inc-same').checked)  buildPerRef('inc-per-block',refs,'inc');
+
+function onRefBlur(inp) {
+  if (inp.value.trim()) inp.value = normalizeRef(inp.value);
 }
-function buildPerRef(cid,refs,pfx){
-  const c=document.getElementById(cid);
-  const ex={};c.querySelectorAll('textarea').forEach(t=>{ex[t.dataset.ref]=t.value;});
-  c.innerHTML='';
-  refs.forEach(ref=>{
-    const lbl=pfx==='desc'?'Description':'Incidence';
-    const item=document.createElement('div');item.className='per-ref-item';
-    item.innerHTML=`<div class="per-ref-lbl">${ref}</div>
-      <textarea class="per-ref-ta" data-ref="${ref}" placeholder="${lbl} pour ${ref}…">${ex[ref]||''}</textarea>`;
+
+function getRefs() {
+  return Array.from(document.querySelectorAll('#refs-container .ref-input'))
+    .map(function(i) { var v = i.value.trim(); return v ? normalizeRef(v) : null; })
+    .filter(Boolean);
+}
+
+function getInvalidRefs() {
+  return getRefs().filter(function(v) { return !validRef(v); });
+}
+
+function refreshPerRef() {
+  var refs = getRefs();
+  if (!document.getElementById('f-desc-same').checked) buildPerRef('desc-per-block', refs, 'desc');
+  if (!document.getElementById('f-inc-same').checked)  buildPerRef('inc-per-block',  refs, 'inc');
+}
+
+function buildPerRef(cid, refs, pfx) {
+  var c = document.getElementById(cid);
+  var ex = {};
+  c.querySelectorAll('textarea').forEach(function(t) { ex[t.dataset.ref] = t.value; });
+  c.innerHTML = '';
+  refs.forEach(function(ref) {
+    var lbl  = pfx === 'desc' ? 'Description' : 'Incidence';
+    var item = document.createElement('div');
+    item.className = 'per-ref-item';
+    item.innerHTML = '<div class="per-ref-lbl">' + ref + '</div>'
+      + '<textarea class="per-ref-ta" data-ref="' + ref + '" placeholder="' + lbl + ' pour ' + ref + '&#8230;">'
+      + (ex[ref] || '') + '</textarea>';
     c.appendChild(item);
   });
 }
-function toggleDescMode(){
-  const s=document.getElementById('f-desc-same').checked;
-  document.getElementById('desc-global-block').style.display=s?'':'none';
-  document.getElementById('desc-per-block').style.display=s?'none':'';
-  if(!s)buildPerRef('desc-per-block',getRefs(),'desc');
-}
-function toggleIncMode(){
-  const s=document.getElementById('f-inc-same').checked;
-  document.getElementById('inc-global-block').style.display=s?'':'none';
-  document.getElementById('inc-per-block').style.display=s?'none':'';
-  if(!s)buildPerRef('inc-per-block',getRefs(),'inc');
+
+function toggleDescMode() {
+  var s = document.getElementById('f-desc-same').checked;
+  document.getElementById('desc-global-block').style.display = s ? '' : 'none';
+  document.getElementById('desc-per-block').style.display    = s ? 'none' : '';
+  if (!s) buildPerRef('desc-per-block', getRefs(), 'desc');
 }
 
-// ══════════════════════════════════════════════
-//  MÉDIAS DANS LE FORMULAIRE
-// ══════════════════════════════════════════════
-function handleFormMedia(e){
-  const files=[...e.target.files];
-  let done=0;
-  files.forEach(f=>{
-    const r=new FileReader();
-    r.onload=ev=>{
-      _formMedia.push({name:f.name,type:f.type,data:ev.target.result});
-      if(++done===files.length)renderFormMedia();
+function toggleIncMode() {
+  var s = document.getElementById('f-inc-same').checked;
+  document.getElementById('inc-global-block').style.display = s ? '' : 'none';
+  document.getElementById('inc-per-block').style.display    = s ? 'none' : '';
+  if (!s) buildPerRef('inc-per-block', getRefs(), 'inc');
+}
+
+// ═══════════════════════════════════════════════════════
+//  MÉDIAS FORMULAIRE
+// ═══════════════════════════════════════════════════════
+function handleFormMedia(e) {
+  var files = Array.from(e.target.files);
+  var done = 0;
+  if (!files.length) return;
+  files.forEach(function(f) {
+    var r = new FileReader();
+    r.onload = function(ev) {
+      _formMedia.push({name: f.name, type: f.type, data: ev.target.result});
+      if (++done === files.length) renderFormMedia();
     };
     r.readAsDataURL(f);
   });
-  e.target.value='';
+  e.target.value = '';
 }
-function deleteFormMedia(i){_formMedia.splice(i,1);renderFormMedia();}
-function renderFormMedia(){
-  const g=document.getElementById('form-media-gallery');
-  g.innerHTML='';
-  _formMedia.forEach((m,i)=>{
-    const div=document.createElement('div');div.className='media-thumb';
-    if(m.type==='application/pdf'){
-      div.innerHTML=`<div class="pdf-icon" onclick="window.open('${m.data}','_blank')"><span style="font-size:22px">📄</span><span class="pdf-name">${m.name}</span></div>`;
-    }else{
-      div.innerHTML=`<img src="${m.data}" alt="${m.name}" onclick="openLightbox('${m.data}')">`;
+
+function deleteFormMedia(i) { _formMedia.splice(i, 1); renderFormMedia(); }
+
+function renderFormMedia() {
+  var g = document.getElementById('form-media-gallery');
+  g.innerHTML = '';
+  _formMedia.forEach(function(m, i) {
+    var div = document.createElement('div');
+    div.className = 'media-thumb';
+    if (m.type === 'application/pdf') {
+      div.innerHTML = '<div class="pdf-icon" onclick="window.open(\'' + m.data + '\',\'_blank\')">'
+        + '<span style="font-size:22px">&#128196;</span><span class="pdf-name">' + m.name + '</span></div>';
+    } else {
+      div.innerHTML = '<img src="' + m.data + '" alt="' + m.name + '" onclick="openLightbox(\'' + m.data + '\')">';
     }
-    div.innerHTML+=`<button class="media-del" onclick="deleteFormMedia(${i})">×</button>`;
+    div.innerHTML += '<button class="media-del" onclick="deleteFormMedia(' + i + ')">&#215;</button>';
     g.appendChild(div);
   });
-  // zone upload toujours en dernier
-  const uz=document.createElement('div');uz.className='upload-zone';
-  uz.innerHTML='<span>＋</span><span>Ajouter</span>';
-  uz.onclick=()=>document.getElementById('form-media-in').click();
+  var uz = document.createElement('div');
+  uz.className = 'upload-zone';
+  uz.innerHTML = '<span>&#65291;</span><span>Ajouter</span>';
+  uz.onclick = function() { document.getElementById('form-media-in').click(); };
   g.appendChild(uz);
 }
 
-// ══════════════════════════════════════════════
-//  SUBMIT (création + édition)
-// ══════════════════════════════════════════════
-function submitForm(){
-  const dem=document.getElementById('f-dem').value.trim();
-  if(!dem){alert('Veuillez renseigner le demandeur.');return;}
-  const dateISO=document.getElementById('f-date').value;
-  if(!dateISO){alert('Veuillez saisir une date.');return;}
-  const refs=getRefs();
-  if(!refs.length){alert('Veuillez saisir au moins une référence valide.');return;}
-
-  const descSame=document.getElementById('f-desc-same').checked;
-  const incSame =document.getElementById('f-inc-same').checked;
-  const refData=refs.map(ref=>({
-    ref,
-    desc:descSame?document.getElementById('f-desc-global').value.trim()
-                 :(document.querySelector(`#desc-per-block textarea[data-ref="${ref}"]`)?.value.trim()||''),
-    inc: incSame ?document.getElementById('f-inc-global').value.trim()
-                 :(document.querySelector(`#inc-per-block textarea[data-ref="${ref}"]`)?.value.trim()||''),
-  }));
-
-  if(_editId!==null){
-    // ÉDITION
-    let entry=[...db,...archive].find(e=>e.id===_editId);
-    if(entry){
-      entry.demandeur=dem;
-      entry.date=isoToDisplay(dateISO);
-      entry.refData=refData;
-      entry.media=[..._formMedia];
+// ═══════════════════════════════════════════════════════
+//  SUBMIT
+// ═══════════════════════════════════════════════════════
+function doSubmit() {
+  var dem      = document.getElementById('f-dem').value.trim();
+  var dateISO  = document.getElementById('f-date').value;
+  var refs     = getRefs();
+  var descSame = document.getElementById('f-desc-same').checked;
+  var incSame  = document.getElementById('f-inc-same').checked;
+  var refData  = refs.map(function(ref) {
+    var dEl = document.querySelector('#desc-per-block textarea[data-ref="' + ref + '"]');
+    var iEl = document.querySelector('#inc-per-block textarea[data-ref="' + ref + '"]');
+    return {
+      ref:  ref,
+      desc: descSame ? document.getElementById('f-desc-global').value.trim() : (dEl ? dEl.value.trim() : ''),
+      inc:  incSame  ? document.getElementById('f-inc-global').value.trim()  : (iEl ? iEl.value.trim() : '')
+    };
+  });
+  if (_editId !== null) {
+    var entry = findEntry(_editId);
+    if (entry) {
+      entry.demandeur = dem;
+      entry.date      = isoToDisplay(dateISO);
+      entry.refData   = refData;
+      entry.media     = _formMedia.slice();
     }
-  }else{
-    // CRÉATION
+  } else {
     db.push({
-      id:Date.now(),date:isoToDisplay(dateISO),demandeur:dem,refData,media:[..._formMedia],
-      statuts:{cao:{val:'a_faire',ts:null},prod:{val:'a_faire',ts:null},be:{val:'a_faire',ts:null},pmi:{val:'a_faire',ts:null}}
+      id: Date.now(), date: isoToDisplay(dateISO), demandeur: dem,
+      refData: refData, media: _formMedia.slice(),
+      statuts: {
+        cao:  {val:'a_faire',ts:null}, prod: {val:'a_faire',ts:null},
+        be:   {val:'a_faire',ts:null}, pmi:  {val:'a_faire',ts:null}
+      }
     });
   }
-
   closeModal();
   renderAll();
   scheduleSave();
 }
 
-// ══════════════════════════════════════════════
+function submitForm() {
+  var dem = document.getElementById('f-dem').value.trim();
+  if (!dem) { alert('Veuillez renseigner le demandeur.'); return; }
+  var dateISO = document.getElementById('f-date').value;
+  if (!dateISO) { alert('Veuillez saisir une date.'); return; }
+  var refs = getRefs();
+  if (!refs.length) { alert('Veuillez saisir au moins une référence.'); return; }
+  var invalid = getInvalidRefs();
+  if (invalid.length > 0) {
+    var list = invalid.map(function(r) { return '  ' + r; }).join('\n');
+    showConfirm(
+      'Format inhabituel',
+      'Ces références ne correspondent pas au format attendu (X00.000_Y) :\n\n' + list + '\n\nVoulez-vous quand même valider ?',
+      'Valider quand même',
+      doSubmit,
+      true
+    );
+    return;
+  }
+  doSubmit();
+}
+
+// ═══════════════════════════════════════════════════════
 //  DETAIL HTML
-// ══════════════════════════════════════════════
-function buildDetailHTML(entry){
-  let h='<div class="detail-grid">';
-  entry.refData.forEach(rd=>{
-    h+=`<div class="detail-item"><label>${rd.ref} — Description</label>
-      <p>${rd.desc||'<span style="color:var(--text-muted);font-style:italic">—</span>'}</p></div>
-      <div class="detail-item"><label>${rd.ref} — Incidence</label>
-      <p>${rd.inc||'<span style="color:var(--text-muted);font-style:italic">—</span>'}</p></div>`;
+// ═══════════════════════════════════════════════════════
+function buildDetailHTML(entry) {
+  var h = '<div class="detail-grid">';
+  entry.refData.forEach(function(rd) {
+    h += '<div class="detail-item"><label>' + rd.ref + ' &#8212; Description</label>'
+      + '<p>' + (rd.desc || '<span style="color:var(--text-muted);font-style:italic">&#8212;</span>') + '</p></div>'
+      + '<div class="detail-item"><label>' + rd.ref + ' &#8212; Incidence</label>'
+      + '<p>' + (rd.inc  || '<span style="color:var(--text-muted);font-style:italic">&#8212;</span>') + '</p></div>';
   });
-  h+='</div>';
-  // Médias
-  const media=entry.media||[];
-  h+=`<div class="media-section"><div class="media-section-lbl">Médias joints (${media.length})</div><div class="media-gallery">`;
-  if(media.length===0) h+='<span style="font-family:var(--mono);font-size:10px;color:var(--text-muted)">Aucun média joint.</span>';
-  media.forEach((m,i)=>{
-    h+=`<div class="media-thumb">`;
-    if(m.type==='application/pdf'){
-      h+=`<div class="pdf-icon" onclick="window.open('${m.data}','_blank')"><span style="font-size:22px">📄</span><span class="pdf-name">${m.name}</span></div>`;
-    }else{
-      h+=`<img src="${m.data}" alt="${m.name}" onclick="openLightbox('${m.data}')">`;
+  h += '</div>';
+  var media = entry.media || [];
+  h += '<div class="media-section"><div class="media-section-lbl">Médias joints (' + media.length + ')</div><div class="media-gallery">';
+  if (media.length === 0) {
+    h += '<span style="font-family:var(--mono);font-size:10px;color:var(--text-muted)">Aucun média joint.</span>';
+  }
+  media.forEach(function(m) {
+    h += '<div class="media-thumb">';
+    if (m.type === 'application/pdf') {
+      h += '<div class="pdf-icon" onclick="window.open(\'' + m.data + '\',\'_blank\')">'
+        + '<span style="font-size:22px">&#128196;</span><span class="pdf-name">' + m.name + '</span></div>';
+    } else {
+      h += '<img src="' + m.data + '" alt="' + m.name + '" onclick="openLightbox(\'' + m.data + '\')">';
     }
-    h+=`</div>`;
+    h += '</div>';
   });
-  h+=`</div></div>`;
+  h += '</div></div>';
   return h;
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  CONFIRM
-// ══════════════════════════════════════════════
-function showConfirm(title,msg,okLbl,cb){
-  document.getElementById('confirm-title').textContent=title;
-  document.getElementById('confirm-msg').textContent=msg;
-  document.getElementById('confirm-ok').textContent=okLbl;
-  _confirmCb=cb;
+// ═══════════════════════════════════════════════════════
+function showConfirm(title, msg, okLbl, cb, warn) {
+  document.getElementById('confirm-title').textContent     = title;
+  document.getElementById('confirm-title').style.color     = warn ? 'var(--orange)' : 'var(--red-del)';
+  document.getElementById('confirm-msg').textContent       = msg;
+  document.getElementById('confirm-ok').textContent        = okLbl;
+  document.getElementById('confirm-ok').style.background   = warn ? 'var(--accent)' : 'var(--red-del)';
+  document.getElementById('confirm-ok').style.color        = '#fff';
+  _confirmCb = cb;
   document.getElementById('confirm-bg').classList.add('open');
 }
-function confirmOk(){document.getElementById('confirm-bg').classList.remove('open');if(_confirmCb)_confirmCb();_confirmCb=null;}
-function confirmCancel(){document.getElementById('confirm-bg').classList.remove('open');_confirmCb=null;}
+function confirmOk() {
+  document.getElementById('confirm-bg').classList.remove('open');
+  if (_confirmCb) _confirmCb();
+  _confirmCb = null;
+}
+function confirmCancel() {
+  document.getElementById('confirm-bg').classList.remove('open');
+  _confirmCb = null;
+}
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  LIGHTBOX
-// ══════════════════════════════════════════════
-function openLightbox(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open');}
-function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+// ═══════════════════════════════════════════════════════
+function openLightbox(src) { document.getElementById('lb-img').src = src; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox()   { document.getElementById('lightbox').classList.remove('open'); }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function findEntry(id) {
+  var i;
+  for (i = 0; i < db.length; i++)      { if (db[i].id === id)      return db[i]; }
+  for (i = 0; i < archive.length; i++) { if (archive[i].id === id) return archive[i]; }
+  return null;
+}
+function allDone(entry) {
+  return STATUS_COLS.every(function(c) { return entry.statuts[c.key].val === 'a_fait'; });
+}
+
+// ═══════════════════════════════════════════════════════
 //  RENDER ACTIF
-// ══════════════════════════════════════════════
-function allDone(e){return STATUS_COLS.every(c=>e.statuts[c.key].val==='a_fait')}
+// ═══════════════════════════════════════════════════════
+function renderActif() {
+  var tbody = document.getElementById('tbody-actif');
+  tbody.innerHTML = '';
+  document.getElementById('cnt-actif').textContent        = db.length;
+  document.getElementById('empty-actif').style.display   = db.length === 0 ? '' : 'none';
+  document.getElementById('tbl-actif').style.display     = db.length === 0 ? 'none' : '';
 
-function renderActif(){
-  const tbody=document.getElementById('tbody-actif');
-  tbody.innerHTML='';
-  document.getElementById('cnt-actif').textContent=db.length;
-  document.getElementById('empty-actif').style.display=db.length===0?'':'none';
-  document.getElementById('tbl-actif').style.display=db.length===0?'none':'';
-
-  db.forEach((entry,idx)=>{
-    const tr=document.createElement('tr');tr.id='row-'+entry.id;
-    let sTds='';
-    STATUS_COLS.forEach(col=>{
-      const s=entry.statuts[col.key];
-      sTds+=`<td><div class="status-cell">
-        <select class="status-select ${s.val==='a_fait'?'done':''}" onchange="changeStatus(${entry.id},'${col.key}',this)">
-          <option value="a_faire" ${s.val==='a_faire'?'selected':''}>À faire</option>
-          <option value="a_fait"  ${s.val==='a_fait'?'selected':''}>Fait ✓</option>
-        </select>
-        ${s.ts?`<span class="status-ts">${formatTs(s.ts)}</span>`:''}
-      </div></td>`;
+  db.forEach(function(entry, idx) {
+    var tr = document.createElement('tr');
+    tr.id  = 'row-' + entry.id;
+    var sTds = '';
+    STATUS_COLS.forEach(function(col) {
+      var s = entry.statuts[col.key];
+      sTds += '<td><div class="status-cell">'
+        + '<select class="status-select ' + (s.val === 'a_fait' ? 'done' : '') + '"'
+        + ' onchange="changeStatus(' + entry.id + ',\'' + col.key + '\',this)">'
+        + '<option value="a_faire"' + (s.val === 'a_faire' ? ' selected' : '') + '>&#192; faire</option>'
+        + '<option value="a_fait"'  + (s.val === 'a_fait'  ? ' selected' : '') + '>Fait &#10003;</option>'
+        + '</select>'
+        + (s.ts ? '<span class="status-ts">' + formatTs(s.ts) + '</span>' : '')
+        + '</div></td>';
     });
-    const done=allDone(entry);
-    tr.innerHTML=`
-      <td><button class="expand-btn" id="eb-${entry.id}" onclick="toggleDetail(${entry.id})">▸</button></td>
-      <td class="mono" style="color:var(--text-muted)">#${String(idx+1).padStart(3,'0')}</td>
-      <td class="mono">${entry.date}</td>
-      <td>${entry.demandeur}</td>
-      <td>${entry.refData.map(r=>`<span class="badge badge-accent">${r.ref}</span>`).join('')}</td>
-      ${sTds}
-      <td><div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">
-        <button class="btn-sm blue" onclick="openModal(${entry.id})">✎ Éditer</button>
-        <button class="btn-sm green" ${done?'':'disabled'} onclick="archiveEntry(${entry.id})">Archiver</button>
-        <button class="btn-sm red"   onclick="deleteEntry(${entry.id})">✕</button>
-      </div></td>`;
+    var done = allDone(entry);
+    var refs = entry.refData.map(function(r) { return '<span class="badge badge-accent">' + r.ref + '</span>'; }).join('');
+    tr.innerHTML = '<td><button class="expand-btn" id="eb-' + entry.id + '" onclick="toggleDetail(' + entry.id + ')">&#9658;</button></td>'
+      + '<td class="mono" style="color:var(--text-muted)">#' + String(idx+1).padStart(3,'0') + '</td>'
+      + '<td class="mono">' + entry.date + '</td>'
+      + '<td>' + entry.demandeur + '</td>'
+      + '<td>' + refs + '</td>'
+      + sTds
+      + '<td><div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">'
+      + '<button class="btn-sm blue" onclick="openModal(' + entry.id + ')">&#9998; &#201;diter</button>'
+      + '<button class="btn-sm green"' + (done ? '' : ' disabled') + ' onclick="archiveEntry(' + entry.id + ')">Archiver</button>'
+      + '<button class="btn-sm red" onclick="deleteEntry(' + entry.id + ')">&#10005;</button>'
+      + '</div></td>';
     tbody.appendChild(tr);
-
-    const dtr=document.createElement('tr');dtr.id='det-'+entry.id;dtr.className='detail-row';
-    dtr.innerHTML=`<td colspan="10">${buildDetailHTML(entry)}</td>`;
+    var dtr = document.createElement('tr');
+    dtr.id  = 'det-' + entry.id;
+    dtr.className = 'detail-row';
+    dtr.innerHTML = '<td colspan="10">' + buildDetailHTML(entry) + '</td>';
     tbody.appendChild(dtr);
   });
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  RENDER ARCHIVE
-// ══════════════════════════════════════════════
-function renderArchive(){
-  const tbody=document.getElementById('tbody-archive');
-  tbody.innerHTML='';
-  document.getElementById('cnt-archive').textContent=archive.length;
-  document.getElementById('empty-archive').style.display=archive.length===0?'':'none';
-  document.getElementById('tbl-archive').style.display=archive.length===0?'none':'';
+// ═══════════════════════════════════════════════════════
+function renderArchive() {
+  var tbody = document.getElementById('tbody-archive');
+  tbody.innerHTML = '';
+  document.getElementById('cnt-archive').textContent      = archive.length;
+  document.getElementById('empty-archive').style.display  = archive.length === 0 ? '' : 'none';
+  document.getElementById('tbl-archive').style.display    = archive.length === 0 ? 'none' : '';
 
-  archive.forEach((entry,idx)=>{
-    const tr=document.createElement('tr');tr.id='arow-'+entry.id;
-    let sTds='';
-    STATUS_COLS.forEach(col=>{
-      const s=entry.statuts[col.key];
-      sTds+=`<td><div class="status-cell">
-        <span class="badge" style="color:var(--green);border-color:rgba(46,158,94,.3)">Fait ✓</span>
-        ${s.ts?`<span class="status-ts">${formatTs(s.ts)}</span>`:''}
-      </div></td>`;
+  archive.forEach(function(entry, idx) {
+    var tr = document.createElement('tr');
+    tr.id  = 'arow-' + entry.id;
+    var sTds = '';
+    STATUS_COLS.forEach(function(col) {
+      var s = entry.statuts[col.key];
+      sTds += '<td><div class="status-cell">'
+        + '<span class="badge" style="color:var(--green);border-color:rgba(46,158,94,.3)">Fait &#10003;</span>'
+        + (s.ts ? '<span class="status-ts">' + formatTs(s.ts) + '</span>' : '')
+        + '</div></td>';
     });
-    tr.innerHTML=`
-      <td><button class="expand-btn" id="aeb-${entry.id}" onclick="toggleADetail(${entry.id})">▸</button></td>
-      <td class="mono" style="color:var(--text-muted)">#${String(idx+1).padStart(3,'0')}</td>
-      <td class="mono">${entry.date}</td>
-      <td>${entry.demandeur}</td>
-      <td>${entry.refData.map(r=>`<span class="badge">${r.ref}</span>`).join('')}</td>
-      ${sTds}
-      <td class="mono" style="font-size:10px;color:var(--text-muted)">${formatTs(entry.archivedAt)}</td>
-      <td><div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">
-        <button class="btn-sm" onclick="unarchiveEntry(${entry.id})">↩ Désarchiver</button>
-        <button class="btn-sm red" onclick="deleteArchive(${entry.id})">✕</button>
-      </div></td>`;
+    var refs = entry.refData.map(function(r) { return '<span class="badge">' + r.ref + '</span>'; }).join('');
+    tr.innerHTML = '<td><button class="expand-btn" id="aeb-' + entry.id + '" onclick="toggleADetail(' + entry.id + ')">&#9658;</button></td>'
+      + '<td class="mono" style="color:var(--text-muted)">#' + String(idx+1).padStart(3,'0') + '</td>'
+      + '<td class="mono">' + entry.date + '</td>'
+      + '<td>' + entry.demandeur + '</td>'
+      + '<td>' + refs + '</td>'
+      + sTds
+      + '<td class="mono" style="font-size:10px;color:var(--text-muted)">' + formatTs(entry.archivedAt) + '</td>'
+      + '<td><div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">'
+      + '<button class="btn-sm" onclick="unarchiveEntry(' + entry.id + ')">&#8629; D&#233;sarchiver</button>'
+      + '<button class="btn-sm red" onclick="deleteArchive(' + entry.id + ')">&#10005;</button>'
+      + '</div></td>';
     tbody.appendChild(tr);
-
-    const dtr=document.createElement('tr');dtr.id='adet-'+entry.id;dtr.className='detail-row';
-    dtr.innerHTML=`<td colspan="11">${buildDetailHTML(entry)}</td>`;
+    var dtr = document.createElement('tr');
+    dtr.id  = 'adet-' + entry.id;
+    dtr.className = 'detail-row';
+    dtr.innerHTML = '<td colspan="11">' + buildDetailHTML(entry) + '</td>';
     tbody.appendChild(dtr);
   });
 }
 
-function renderAll(){renderActif();renderArchive();}
+function renderAll() { renderActif(); renderArchive(); }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  ACTIONS
-// ══════════════════════════════════════════════
-function changeStatus(id,col,sel){
-  const e=db.find(x=>x.id===id);if(!e)return;
-  e.statuts[col].val=sel.value;
-  e.statuts[col].ts=sel.value==='a_fait'?Date.now():null;
-  renderAll();scheduleSave();
+// ═══════════════════════════════════════════════════════
+function changeStatus(id, col, sel) {
+  var entry = findEntry(id);
+  if (!entry) return;
+  entry.statuts[col].val = sel.value;
+  entry.statuts[col].ts  = sel.value === 'a_fait' ? Date.now() : null;
+  renderAll(); scheduleSave();
 }
-function archiveEntry(id){
-  const i=db.findIndex(e=>e.id===id);if(i===-1)return;
-  const e=db.splice(i,1)[0];e.archivedAt=Date.now();archive.unshift(e);
-  renderAll();scheduleSave();
+function archiveEntry(id) {
+  var idx = -1;
+  db.forEach(function(e, i) { if (e.id === id) idx = i; });
+  if (idx === -1) return;
+  var entry = db.splice(idx, 1)[0];
+  entry.archivedAt = Date.now();
+  archive.unshift(entry);
+  renderAll(); scheduleSave();
 }
-function unarchiveEntry(id){
-  const i=archive.findIndex(e=>e.id===id);if(i===-1)return;
-  const e=archive.splice(i,1)[0];delete e.archivedAt;db.push(e);
-  renderAll();scheduleSave();
+function unarchiveEntry(id) {
+  var idx = -1;
+  archive.forEach(function(e, i) { if (e.id === id) idx = i; });
+  if (idx === -1) return;
+  var entry = archive.splice(idx, 1)[0];
+  delete entry.archivedAt;
+  db.push(entry);
+  renderAll(); scheduleSave();
 }
-function deleteEntry(id){
-  showConfirm('Supprimer la demande','Cette demande sera définitivement supprimée.','Supprimer',
-    ()=>{db=db.filter(e=>e.id!==id);renderAll();scheduleSave();});
+function deleteEntry(id) {
+  showConfirm('Supprimer la demande', 'Cette demande sera définitivement supprimée.', 'Supprimer', function() {
+    db = db.filter(function(e) { return e.id !== id; });
+    renderAll(); scheduleSave();
+  });
 }
-function deleteArchive(id){
-  showConfirm("Supprimer l'archive","Cette entrée archivée sera définitivement supprimée.",'Supprimer',
-    ()=>{archive=archive.filter(e=>e.id!==id);renderAll();scheduleSave();});
+function deleteArchive(id) {
+  showConfirm('Supprimer l\'archive', 'Cette entrée sera définitivement supprimée.', 'Supprimer', function() {
+    archive = archive.filter(function(e) { return e.id !== id; });
+    renderAll(); scheduleSave();
+  });
 }
-function toggleDetail(id){
-  const dtr=document.getElementById('det-'+id),btn=document.getElementById('eb-'+id);
-  const open=dtr.classList.contains('open');
-  dtr.classList.toggle('open',!open);btn.classList.toggle('open',!open);
-  btn.textContent=open?'▸':'▾';
+function toggleDetail(id) {
+  var dtr = document.getElementById('det-'  + id);
+  var btn = document.getElementById('eb-'   + id);
+  var open = dtr.classList.contains('open');
+  dtr.classList.toggle('open', !open); btn.classList.toggle('open', !open);
+  btn.textContent = open ? '\u25B8' : '\u25BE';
 }
-function toggleADetail(id){
-  const dtr=document.getElementById('adet-'+id),btn=document.getElementById('aeb-'+id);
-  const open=dtr.classList.contains('open');
-  dtr.classList.toggle('open',!open);btn.classList.toggle('open',!open);
-  btn.textContent=open?'▸':'▾';
+function toggleADetail(id) {
+  var dtr = document.getElementById('adet-' + id);
+  var btn = document.getElementById('aeb-'  + id);
+  var open = dtr.classList.contains('open');
+  dtr.classList.toggle('open', !open); btn.classList.toggle('open', !open);
+  btn.textContent = open ? '\u25B8' : '\u25BE';
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 //  INIT
-// ══════════════════════════════════════════════
-if(cfgOk()){
-  loadFromGitHub();
-} else {
-  updateSyncPill('idle','Non configuré — cliquez ⚙');
-  renderAll();
-}
-<script type="module">
-  // 1. Import the functions you need from the SDKs
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // 2. Your web app's Firebase configuration
-  const firebaseConfig = {
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBLHw6yeiqeJTtp2O8KDUl7_xu0Dg-sxHM",
-  authDomain: "rts00029-5ef6a.firebaseapp.com",
-  projectId: "rts00029-5ef6a",
-  storageBucket: "rts00029-5ef6a.firebasestorage.app",
-  messagingSenderId: "796484288528",
-  appId: "1:796484288528:web:9a7cef1201fcaf16150a95",
-  measurementId: "G-GYPXR30RGV"
-};
-  };
-
-  // 3. Initialize Firebase and the Database
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // 4. FUNCTION TO SAVE DATA (Connect this to your Form)
-  window.saveData = async function() {
-    const userPassword = document.getElementById('passwordInput').value;
-    
-    // Simple UI Password Check
-    if (userPassword !== "YourSecretPassword") {
-      alert("Incorrect password!");
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "entries"), {
-        name: document.getElementById('nameField').value,
-        message: document.getElementById('messageField').value,
-        timestamp: new Date()
-      });
-      alert("Success! Entry saved.");
-      location.reload(); // Refresh to see the new data
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
-
-  // 5. FUNCTION TO LOAD DATA (Runs when page opens)
-  async function loadData() {
-    const q = query(collection(db, "entries"), orderBy("timestamp", "desc"));
-    const querySnapshot = await getDocs(q);
-    
-    const listDiv = document.getElementById('displayArea');
-    listDiv.innerHTML = ""; // Clear old data
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      listDiv.innerHTML += `<p><b>${data.name}:</b> ${data.message}</p>`;
-    });
-  }
-
-  loadData(); // Call this immediately
-</script>
+// ═══════════════════════════════════════════════════════
+loadFromGitHub();
 </script>
 </body>
 </html>
