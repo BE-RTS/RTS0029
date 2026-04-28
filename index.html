@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — Mise à Jour Plans</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='6' fill='%23AA0E10'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='36' font-family='monospace' fill='white'>P</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -33,6 +34,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .login-sub{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.06em;margin-bottom:28px}
 .login-error{font-family:var(--mono);font-size:10px;color:#c0392b;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);padding:8px 10px;margin-bottom:14px;display:none;border-radius:2px}
 .login-error.visible{display:block}
+.login-success{font-family:var(--mono);font-size:10px;color:var(--green);background:var(--green-dim);border:1px solid rgba(46,158,94,.3);padding:8px 10px;margin-bottom:14px;display:none;border-radius:2px}
+.login-success.visible{display:block}
+.chpwd-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:1001;align-items:center;justify-content:center}
+.chpwd-screen.visible{display:flex}
 
 /* ── HEADER ── */
 header{border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;background:var(--surface);position:sticky;top:0;z-index:100;box-shadow:0 1px 6px var(--shadow)}
@@ -201,6 +206,25 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
   </div>
 </div>
 
+<!-- ════════════════ CHANGEMENT MDP (1ère connexion) ════════════════ -->
+<div class="chpwd-screen" id="chpwd-screen">
+  <div class="login-box">
+    <div class="login-logo">PLAN—MANAGER</div>
+    <div class="login-sub">// Première connexion — veuillez définir votre mot de passe</div>
+    <div class="login-error" id="chpwd-error"></div>
+    <div class="login-success" id="chpwd-success"></div>
+    <div class="form-group">
+      <label class="form-label" for="chpwd-new">Nouveau mot de passe</label>
+      <input class="form-input" type="password" id="chpwd-new" placeholder="8 caractères minimum" autocomplete="new-password">
+    </div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label class="form-label" for="chpwd-confirm">Confirmer le mot de passe</label>
+      <input class="form-input" type="password" id="chpwd-confirm" placeholder="Répétez le mot de passe" autocomplete="new-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%" id="chpwd-btn">Définir le mot de passe</button>
+  </div>
+</div>
+
 <!-- ════════════════ APP PRINCIPALE ════════════════ -->
 <div id="app" style="display:none">
 
@@ -271,11 +295,8 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       <div class="form-row">
         <div class="form-group">
           <label class="form-label" for="f-dem">Demandeur</label>
-          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="off">
-          <datalist id="dem-list">
-            <option value="Didier Musekedi"><option value="Yves Martelin">
-            <option value="David Perron"><option value="Christophe Demonaz">
-          </datalist>
+          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="off" readonly>
+          <datalist id="dem-list"></datalist>
         </div>
         <div class="form-group">
           <label class="form-label" for="f-date">Date de la demande</label>
@@ -349,9 +370,11 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
 import { initializeApp }        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, doc, getDoc, addDoc, updateDoc,
+import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc,
          deleteDoc, setDoc, onSnapshot, query, orderBy }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { updatePassword }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 // ════════════════════════════════════════════════
 //  ⚙️  CONFIG FIREBASE — remplace ces valeurs
@@ -440,7 +463,7 @@ onAuthStateChanged(auth, async function(user) {
       return;
     }
     var profile = snap.data();
-    window._session = { user: user, role: profile.role, uid: user.uid };
+    window._session = { user: user, role: profile.role, uid: user.uid, nom: profile.nom || user.email };
 
     // Header
     document.getElementById('user-nom').textContent = profile.nom || user.email;
@@ -448,18 +471,35 @@ onAuthStateChanged(auth, async function(user) {
     badge.textContent = profile.role === 'admin' ? 'Admin' : 'Utilisateur';
     badge.className   = 'role-badge' + (profile.role === 'admin' ? '' : ' user');
 
-    // Affiche l'app
-    document.getElementById('login-screen').classList.remove('visible');
-    document.getElementById('app').style.display = '';
     document.getElementById('login-btn').textContent = 'Se connecter';
     document.getElementById('login-btn').disabled = false;
 
+    // Première connexion → forcer changement de mot de passe
+    if (profile.mustChangePassword === true) {
+      document.getElementById('login-screen').classList.remove('visible');
+      document.getElementById('chpwd-screen').classList.add('visible');
+      document.getElementById('app').style.display = 'none';
+      return;
+    }
+
+    // Affiche l'app
+    document.getElementById('login-screen').classList.remove('visible');
+    document.getElementById('chpwd-screen').classList.remove('visible');
+    document.getElementById('app').style.display = '';
+
+    // Charge la liste des utilisateurs pour le formulaire
+    loadUsersList(profile.role, profile.nom || user.email);
+
     // Listeners temps réel
     _unsubDemandes = onSnapshot(
-      query(collection(firestore, 'demandes'), orderBy('createdAt', 'desc')),
+      collection(firestore, 'demandes'),
       function(snapshot) {
         window._dbData = snapshot.docs.map(function(d) {
           return Object.assign({ _fid: d.id }, d.data());
+        });
+        // Tri par date de demande (JJ/MM/AAAA) décroissant
+        window._dbData.sort(function(a, b) {
+          return dateDisplayToTs(b.date) - dateDisplayToTs(a.date);
         });
         renderActif();
       },
@@ -487,6 +527,71 @@ onAuthStateChanged(auth, async function(user) {
     document.getElementById('app').style.display = 'none';
     if (_unsubDemandes) { _unsubDemandes(); _unsubDemandes = null; }
     if (_unsubArchives) { _unsubArchives(); _unsubArchives = null; }
+  }
+});
+
+// ════════════════════════════════════════════════
+//  LISTE UTILISATEURS pour datalist demandeur
+// ════════════════════════════════════════════════
+async function loadUsersList(role, currentNom) {
+  var dl = document.getElementById('dem-list');
+  var input = document.getElementById('f-dem');
+  if (role !== 'admin') {
+    // Utilisateur : champ verrouillé sur son propre nom
+    input.value    = currentNom;
+    input.readOnly = true;
+    input.style.color = 'var(--text-dim)';
+    dl.innerHTML = '';
+    return;
+  }
+  // Admin : champ libre avec autofill sur tous les utilisateurs
+  input.readOnly = false;
+  input.style.color = '';
+  try {
+    var snap = await getDocs(collection(firestore, 'users'));
+    dl.innerHTML = '';
+    snap.forEach(function(d) {
+      var nom = d.data().nom;
+      if (nom) {
+        var opt = document.createElement('option');
+        opt.value = nom;
+        dl.appendChild(opt);
+      }
+    });
+  } catch(e) { console.error('loadUsersList:', e); }
+}
+
+// ════════════════════════════════════════════════
+//  CHANGEMENT DE MOT DE PASSE (1ère connexion)
+// ════════════════════════════════════════════════
+document.getElementById('chpwd-btn').addEventListener('click', async function() {
+  var np  = document.getElementById('chpwd-new').value;
+  var nc  = document.getElementById('chpwd-confirm').value;
+  var errEl = document.getElementById('chpwd-error');
+  var okEl  = document.getElementById('chpwd-success');
+  errEl.classList.remove('visible'); okEl.classList.remove('visible');
+
+  if (np.length < 8)    { errEl.textContent = 'Le mot de passe doit faire au moins 8 caractères.'; errEl.classList.add('visible'); return; }
+  if (np !== nc)        { errEl.textContent = 'Les mots de passe ne correspondent pas.'; errEl.classList.add('visible'); return; }
+
+  var btn = this; btn.textContent = 'Enregistrement…'; btn.disabled = true;
+  try {
+    var user = auth.currentUser;
+    await updatePassword(user, np);
+    // Mettre mustChangePassword à false dans Firestore
+    await updateDoc(doc(firestore, 'users', user.uid), { mustChangePassword: false });
+    okEl.textContent = 'Mot de passe défini avec succès !';
+    okEl.classList.add('visible');
+    setTimeout(function() {
+      document.getElementById('chpwd-screen').classList.remove('visible');
+      document.getElementById('app').style.display = '';
+      var profile = window._session;
+      loadUsersList(profile.role, profile.nom);
+    }, 1200);
+  } catch(e) {
+    btn.textContent = 'Définir le mot de passe'; btn.disabled = false;
+    errEl.textContent = 'Erreur : ' + e.message;
+    errEl.classList.add('visible');
   }
 });
 
@@ -578,6 +683,13 @@ document.getElementById('theme-btn').addEventListener('click', function() {
 //  CLOCK
 // ════════════════════════════════════════════════
 function pad(n) { return String(n).padStart(2, '0'); }
+function dateDisplayToTs(disp) {
+  // "JJ/MM/AAAA" → timestamp pour tri
+  if (!disp) return 0;
+  var p = disp.split('/');
+  if (p.length !== 3) return 0;
+  return new Date(p[2], p[1]-1, p[0]).getTime();
+}
 function formatDate(d) { return pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '/' + d.getFullYear(); }
 function formatTs(ts) { return ts ? formatDate(new Date(ts)) : ''; }
 function todayISO() {
