@@ -271,11 +271,8 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       <div class="form-row">
         <div class="form-group">
           <label class="form-label" for="f-dem">Demandeur</label>
-          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="off">
-          <datalist id="dem-list">
-            <option value="Didier Musekedi"><option value="Yves Martelin">
-            <option value="David Perron"><option value="Christophe Demonaz">
-          </datalist>
+          <input list="dem-list" id="dem-input" placeholder="Sélectionnez un utilisateur...">
+          <datalist id="dem-list"></datalist>
         </div>
         <div class="form-group">
           <label class="form-label" for="f-date">Date de la demande</label>
@@ -1108,6 +1105,31 @@ function renderArchive() {
 
   attachTableListeners('tbody-archive', true);
 }
+
+// 📌 Charger les utilisateurs dans le datalist
+async function loadUsers() {
+  const datalist = document.getElementById("dem-list");
+  datalist.innerHTML = ""; // reset
+
+  try {
+    const querySnapshot = await getDocs(collection(firestore, "users"));
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      if (data.nom) {
+        const option = document.createElement("option");
+        option.value = data.nom;
+        datalist.appendChild(option);
+      }
+    });
+
+  } catch (error) {
+    console.error("Erreur chargement users :", error);
+  }
+}
+// 🚀 lancement
+loadUsers();
 
 // ════════════════════════════════════════════════
 //  LISTENERS DÉLÉGUÉS (un seul handler par tbody)
