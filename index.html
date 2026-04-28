@@ -24,6 +24,17 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh;transition:background .22s,color .22s}
+
+/* ── LOGIN SCREEN ── */
+.login-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;align-items:center;justify-content:center}
+.login-screen.visible{display:flex}
+.login-box{background:var(--surface);border:1px solid var(--border-light);padding:36px 40px;width:360px;border-radius:2px;box-shadow:0 8px 40px var(--shadow)}
+.login-logo{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin-bottom:6px}
+.login-sub{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.06em;margin-bottom:28px}
+.login-error{font-family:var(--mono);font-size:10px;color:#c0392b;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);padding:8px 10px;margin-bottom:14px;display:none;border-radius:2px}
+.login-error.visible{display:block}
+
+/* ── HEADER ── */
 header{border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;background:var(--surface);position:sticky;top:0;z-index:100;box-shadow:0 1px 6px var(--shadow)}
 .logo{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .logo-sub{color:var(--text-muted);font-weight:400;font-size:9.5px}
@@ -34,18 +45,27 @@ header{border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:
 .sync-pill.err{color:var(--red-del);border-color:rgba(192,57,43,.4);background:rgba(192,57,43,.08)}
 .sync-pill.saving{color:var(--accent);border-color:rgba(170,14,16,.35);background:var(--accent-faint)}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.user-info{font-family:var(--mono);font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.role-badge{font-size:9px;padding:1px 6px;border-radius:10px;border:1px solid rgba(170,14,16,.25);background:var(--accent-faint);color:var(--accent)}
+.role-badge.user{color:var(--green);border-color:rgba(46,158,94,.3);background:var(--green-dim)}
 .icon-btn{background:var(--surface2);border:1px solid var(--border-light);color:var(--text-dim);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border-radius:2px;transition:all .14s}
 .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── TABS ── */
 .tabs{display:flex;border-bottom:1px solid var(--border);padding:0 28px;background:var(--surface)}
 .tab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px 16px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .16s;user-select:none}
 .tab:hover{color:var(--text-dim)}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-count{display:inline-block;background:var(--surface3);color:var(--text-muted);font-size:9px;padding:1px 6px;border-radius:10px;margin-left:4px}
 .tab.active .tab-count{background:var(--accent-faint);color:var(--accent)}
+
+/* ── MAIN ── */
 main{padding:22px 28px}
 .view{display:none}.view.active{display:block}
 .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .section-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+
+/* ── BUTTONS ── */
 .btn{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:8px 15px;border:none;cursor:pointer;transition:all .13s;border-radius:2px}
 .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-dim)}
 .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border-light)}
@@ -57,6 +77,8 @@ main{padding:22px 28px}
 .btn-sm.green:disabled{opacity:.25;cursor:not-allowed;pointer-events:none}
 .btn-sm.red{color:var(--red-del);border-color:var(--red-del)}.btn-sm.red:hover{background:rgba(192,57,43,.1)}
 .btn-sm.blue{color:#4a9eff;border-color:#4a9eff}.btn-sm.blue:hover{background:rgba(74,158,255,.1)}
+
+/* ── TABLE ── */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead tr{background:var(--surface2);border-bottom:2px solid var(--border)}
@@ -77,11 +99,15 @@ td.mono{font-family:var(--mono);font-size:10.5px}
 .badge-accent{background:var(--accent-faint);color:var(--accent);border-color:rgba(170,14,16,.25)}
 .empty{text-align:center;padding:52px 20px;color:var(--text-muted);font-family:var(--mono);font-size:10.5px;letter-spacing:.06em}
 .empty-icon{font-size:24px;margin-bottom:10px;opacity:.3}
+
+/* ── DETAIL ROW ── */
 .detail-row{display:none}.detail-row.open{display:table-row}
 .detail-row>td{background:var(--surface2);padding:14px 18px 18px;border-left:3px solid var(--accent)}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .detail-item label{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px}
 .detail-item p{font-size:12px;line-height:1.55;color:var(--text)}
+
+/* ── MEDIA ── */
 .media-section{margin-top:12px}
 .media-section-lbl{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px}
 .media-gallery{display:flex;flex-wrap:wrap;gap:7px;align-items:flex-start}
@@ -95,6 +121,8 @@ td.mono{font-family:var(--mono);font-size:10.5px}
 .upload-zone{width:88px;height:66px;border:1px dashed var(--border-light);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:3px;border-radius:2px;color:var(--text-muted);font-size:20px;transition:all .12s}
 .upload-zone:hover{border-color:var(--accent);color:var(--accent)}
 .upload-zone span{font-family:var(--mono);font-size:8.5px}
+
+/* ── MISC ── */
 .archive-notice{font-family:var(--mono);font-size:10px;color:var(--text-muted);background:var(--surface2);border:1px solid var(--border);padding:8px 13px;margin-bottom:14px;letter-spacing:.04em}
 .modal-backdrop{display:none;position:fixed;inset:0;background:var(--modal-bg);z-index:200;justify-content:center;align-items:flex-start;padding:32px 14px;overflow-y:auto}
 .modal-backdrop.open{display:flex}
@@ -149,72 +177,15 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
 .confirm-title{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
 .confirm-msg{font-size:12.5px;color:var(--text-dim);line-height:1.6;margin-bottom:18px;white-space:pre-wrap}
 .confirm-btns{display:flex;gap:9px;justify-content:flex-end}
-/* ── Styles supplémentaires pour la page de login ── */
-.login-screen {
-      display: none;
-      position: fixed; inset: 0;
-      background: var(--bg);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    .login-screen.visible { display: flex; }
-    .login-box {
-      background: var(--surface);
-      border: 1px solid var(--border-light);
-      padding: 36px 40px;
-      width: 360px;
-      border-radius: 2px;
-      box-shadow: 0 8px 40px var(--shadow);
-    }
-    .login-logo {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: .14em;
-      color: var(--accent);
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-    .login-error {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: #c0392b;
-      background: rgba(192,57,43,.08);
-      border: 1px solid rgba(192,57,43,.3);
-      padding: 8px 10px;
-      margin-bottom: 14px;
-      display: none;
-      border-radius: 2px;
-    }
-    .login-error.visible { display: block; }
-
-    /* Header — zone utilisateur */
-    .user-info {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .user-role-badge {
-      background: var(--accent-faint);
-      color: var(--accent);
-      border: 1px solid rgba(170,14,16,.25);
-      font-size: 9px;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-family: var(--mono);
-    }
 </style>
 </head>
 <body>
 
-<!-- ══ ÉCRAN DE LOGIN (affiché avant tout) ══ -->
+<!-- ════════════════ ÉCRAN DE LOGIN ════════════════ -->
 <div class="login-screen visible" id="login-screen">
   <div class="login-box">
     <div class="login-logo">PLAN—MANAGER</div>
+    <div class="login-sub">// Suivi mises à jour plans</div>
     <div class="login-error" id="login-error"></div>
     <div class="form-group">
       <label class="form-label" for="login-email">Adresse email</label>
@@ -224,41 +195,26 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
     <div class="form-group" style="margin-bottom:20px">
       <label class="form-label" for="login-password">Mot de passe</label>
       <input class="form-input" type="password" id="login-password"
-        placeholder="••••••••" autocomplete="current-password"
-        onkeydown="if(event.key==='Enter')doLogin()">
+        placeholder="••••••••" autocomplete="current-password">
     </div>
-    <button class="btn btn-primary" style="width:100%" onclick="doLogin()" id="login-btn">
-      Se connecter
-    </button>
+    <button class="btn btn-primary" style="width:100%" id="login-btn">Se connecter</button>
   </div>
 </div>
 
-<!-- ══ APP PRINCIPALE (cachée jusqu'au login) ══ -->
+<!-- ════════════════ APP PRINCIPALE ════════════════ -->
 <div id="app" style="display:none">
-
-  <header>
-    <div class="logo">PLAN—MANAGER <span class="logo-sub">// Suivi mises à jour</span></div>
-    <div class="hdr-right">
-      <div class="clock" id="clock"></div>
-      <div class="sync-pill" id="sync-pill">
-        <span class="sync-dot"></span><span id="sync-text">Connexion…</span>
-      </div>
-      <!-- Info utilisateur connecté -->
-      <div class="user-info">
-        <span id="user-email-display"></span>
-        <span class="user-role-badge" id="user-role-display"></span>
-      </div>
-      <button class="icon-btn" title="Déconnexion" onclick="doLogout()">⎋</button>
-      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()">☀️</button>
-    </div>
-  </header>
 
 <header>
   <div class="logo">PLAN<span style="color:var(--border-light);font-weight:300">—</span>MANAGER <span class="logo-sub">// Suivi mises à jour</span></div>
   <div class="hdr-right">
     <div class="clock" id="clock"></div>
-    <div class="sync-pill" id="sync-pill"><span class="sync-dot"></span><span id="sync-text">Connexion…</span></div>
-    <button class="icon-btn" id="theme-btn" title="Basculer thème" onclick="toggleTheme()">☀️</button>
+    <div class="sync-pill" id="sync-pill"><span class="sync-dot"></span><span id="sync-text">Connecté</span></div>
+    <div class="user-info">
+      <span id="user-nom"></span>
+      <span class="role-badge" id="user-role-badge"></span>
+    </div>
+    <button class="icon-btn" title="Déconnexion" id="logout-btn">⎋</button>
+    <button class="icon-btn" id="theme-btn" title="Basculer thème">☀️</button>
   </div>
 </header>
 
@@ -271,7 +227,7 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
   <div class="view active" id="view-actif">
     <div class="toolbar">
       <div class="section-label">Demandes en cours</div>
-      <button class="btn btn-primary" onclick="openModal()">+ Nouvelle demande</button>
+      <button class="btn btn-primary" id="btn-nouvelle">+ Nouvelle demande</button>
     </div>
     <div class="table-wrap">
       <table id="tbl-actif" style="display:none">
@@ -302,17 +258,20 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
   </div>
 </main>
 
+</div><!-- /app -->
+
+<!-- ════════════════ MODAL FORMULAIRE ════════════════ -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-title">Nouvelle demande</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" id="modal-close-btn">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-group">
           <label class="form-label" for="f-dem">Demandeur</label>
-          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="on">
+          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="off">
           <datalist id="dem-list">
             <option value="Didier Musekedi"><option value="Yves Martelin">
             <option value="David Perron"><option value="Christophe Demonaz">
@@ -328,12 +287,12 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
         <label class="form-label">Référence(s) avec indice</label>
         <div class="hint">Format : <span class="hint-a">D00.000_A</span> ou <span class="hint-a">S00.000_...</span> — majuscules auto, underscore ajouté si absent.</div>
         <div class="refs-container" id="refs-container"></div>
-        <button class="add-ref-btn" onclick="addRefRow()">+ Ajouter une référence</button>
+        <button class="add-ref-btn" id="add-ref-btn">+ Ajouter une référence</button>
       </div>
       <hr class="sep">
       <div class="form-group">
         <div class="check-row">
-          <input type="checkbox" id="f-desc-same" checked onchange="toggleDescMode()">
+          <input type="checkbox" id="f-desc-same" checked>
           <label for="f-desc-same" class="check-lbl">Même description pour toutes les références</label>
         </div>
         <div id="desc-global-block">
@@ -344,7 +303,7 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       </div>
       <div class="form-group">
         <div class="check-row">
-          <input type="checkbox" id="f-inc-same" checked onchange="toggleIncMode()">
+          <input type="checkbox" id="f-inc-same" checked>
           <label for="f-inc-same" class="check-lbl">Même incidence pour toutes les références</label>
         </div>
         <div id="inc-global-block">
@@ -357,287 +316,270 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       <div class="form-group">
         <label class="form-label">Médias joints (images, PDF)</label>
         <div class="media-gallery" id="form-media-gallery"></div>
-        <input type="file" id="form-media-in" accept="image/*,.pdf" multiple style="display:none" onchange="handleFormMedia(event)">
+        <input type="file" id="form-media-in" accept="image/*,.pdf" multiple style="display:none">
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-      <button class="btn btn-primary" id="modal-submit-btn" onclick="submitForm()">Enregistrer</button>
+      <button class="btn btn-ghost" id="modal-cancel-btn">Annuler</button>
+      <button class="btn btn-primary" id="modal-submit-btn">Enregistrer</button>
     </div>
   </div>
 </div>
 
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lb-close">✕</button>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lb-close">✕</button>
   <img id="lb-img" src="" alt="">
 </div>
 
+<!-- CONFIRM -->
 <div class="confirm-bg" id="confirm-bg">
   <div class="confirm-box">
     <div class="confirm-title" id="confirm-title"></div>
     <div class="confirm-msg" id="confirm-msg"></div>
     <div class="confirm-btns">
-      <button class="btn btn-ghost" onclick="confirmCancel()">Annuler</button>
-      <button class="btn" id="confirm-ok" onclick="confirmOk()">OK</button>
+      <button class="btn btn-ghost" id="confirm-cancel">Annuler</button>
+      <button class="btn" id="confirm-ok">OK</button>
     </div>
   </div>
 </div>
 
-<!-- ══ SCRIPTS FIREBASE ══ -->
+<!-- ════════════════ FIREBASE SDK ════════════════ -->
 <script type="module">
-  // Import Firebase SDK (via CDN, pas besoin d'npm pour GitHub Pages)
-  import { initializeApp }              from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-  import { getFirestore, collection, doc, getDoc, getDocs,
-           addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy }
-    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { initializeApp }        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, doc, getDoc, addDoc, updateDoc,
+         deleteDoc, setDoc, onSnapshot, query, orderBy }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-  import { firebaseConfig } from './firebase-config.js';
+// ════════════════════════════════════════════════
+//  CONFIG FIREBASE
+// ════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyBLHw6yeiqeJTtp2O8KDUl7_xu0Dg-sxHM",
+  authDomain: "rts00029-5ef6a.firebaseapp.com",
+  projectId: "rts00029-5ef6a",
+  storageBucket: "rts00029-5ef6a.firebasestorage.app",
+  messagingSenderId: "796484288528",
+  appId: "1:796484288528:web:ab0d71ea9905a4eb150a95",
+  measurementId: "G-J8E5H0MDRM"
+};
 
-  // ── Initialisation ──
-  const app  = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
+// ════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const firestore = getFirestore(app);
 
-  // ── Variables globales de session ──
-  window.currentUser     = null;   // objet Firebase User
-  window.currentUserRole = null;   // 'admin' ou 'user'
-  window.isAdmin = () => window.currentUserRole === 'admin';
+// ════════════════════════════════════════════════
+//  SESSION (partagée avec le script non-module)
+// ════════════════════════════════════════════════
+window._session = { user: null, role: null, uid: null };
+window.isAdmin  = function() { return window._session.role === 'admin'; };
 
-  // ══════════════════════════════════════════════
-  //  AUTHENTIFICATION
-  // ══════════════════════════════════════════════
+// ════════════════════════════════════════════════
+//  ERREURS LOGIN
+// ════════════════════════════════════════════════
+function showLoginError(msg) {
+  var el = document.getElementById('login-error');
+  el.textContent = msg; el.classList.add('visible');
+}
+function hideLoginError() {
+  document.getElementById('login-error').classList.remove('visible');
+}
 
-  // Surveille l'état de connexion en permanence
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      // Utilisateur connecté → récupère son profil
-      const profileDoc = await getDoc(doc(db, 'users', user.uid));
-      if (!profileDoc.exists()) {
-        // Profil absent dans Firestore → déconnecte
-        await signOut(auth);
-        showLoginError("Profil introuvable. Contactez l'administrateur.");
-        return;
-      }
-      const profile = profileDoc.data();
-      window.currentUser     = user;
-      window.currentUserRole = profile.role;
-
-      // Affiche l'app, cache le login
-      document.getElementById('login-screen').classList.remove('visible');
-      document.getElementById('app').style.display = '';
-
-      // Met à jour l'affichage du header
-      document.getElementById('user-email-display').textContent = profile.nom || user.email;
-      document.getElementById('user-role-display').textContent  = profile.role === 'admin' ? 'Admin' : 'Utilisateur';
-
-      // Adapte l'interface selon le rôle
-      applyRoleRestrictions();
-
-      // Charge les données Firestore
-      startRealtimeListeners();
-
-    } else {
-      // Non connecté → affiche le login, cache l'app
-      window.currentUser     = null;
-      window.currentUserRole = null;
-      document.getElementById('login-screen').classList.add('visible');
-      document.getElementById('app').style.display = 'none';
-    }
-  });
-
-  window.doLogin = async function() {
-    const email    = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
-    const btn      = document.getElementById('login-btn');
-
-    if (!email || !password) { showLoginError('Veuillez remplir tous les champs.'); return; }
-
-    btn.textContent = 'Connexion…';
-    btn.disabled    = true;
-    hideLoginError();
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // onAuthStateChanged prend le relais automatiquement
-    } catch (e) {
-      btn.textContent = 'Se connecter';
-      btn.disabled    = false;
-      const msg = {
-        'auth/user-not-found':  "Aucun compte avec cet email.",
-        'auth/wrong-password':  "Mot de passe incorrect.",
-        'auth/invalid-email':   "Email invalide.",
-        'auth/too-many-requests': "Trop de tentatives. Réessaie dans quelques minutes.",
-      }[e.code] || "Erreur de connexion : " + e.message;
-      showLoginError(msg);
-    }
-  };
-
-  window.doLogout = async function() {
-    await signOut(auth);
-  };
-
-  function showLoginError(msg) {
-    const el = document.getElementById('login-error');
-    el.textContent = msg;
-    el.classList.add('visible');
-  }
-  function hideLoginError() {
-    document.getElementById('login-error').classList.remove('visible');
-  }
-
-  // ══════════════════════════════════════════════
-  //  RESTRICTIONS D'INTERFACE SELON LE RÔLE
-  // ══════════════════════════════════════════════
-
-  function applyRoleRestrictions() {
-    // Ces fonctions seront appelées aussi après chaque renderAll()
-    // On les stocke pour pouvoir les rappeler
-    window._applyRoleRestrictions = function() {
-      if (window.isAdmin()) return; // Admin : rien à restreindre
-
-      // Utilisateur normal :
-      // - Cache les boutons Supprimer (✕) des demandes des autres
-      // - Cache les boutons Archiver
-      // La logique fine est dans renderActif() — voir section 9
+// ════════════════════════════════════════════════
+//  LOGIN / LOGOUT
+// ════════════════════════════════════════════════
+document.getElementById('login-btn').addEventListener('click', async function() {
+  var email    = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value;
+  if (!email || !password) { showLoginError('Veuillez remplir tous les champs.'); return; }
+  var btn = this;
+  btn.textContent = 'Connexion…'; btn.disabled = true;
+  hideLoginError();
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    btn.textContent = 'Se connecter'; btn.disabled = false;
+    var msgs = {
+      'auth/user-not-found':    'Aucun compte avec cet email.',
+      'auth/wrong-password':    'Mot de passe incorrect.',
+      'auth/invalid-credential':'Email ou mot de passe incorrect.',
+      'auth/invalid-email':     'Email invalide.',
+      'auth/too-many-requests': 'Trop de tentatives. Réessayez plus tard.'
     };
-    window._applyRoleRestrictions();
+    showLoginError(msgs[e.code] || 'Erreur : ' + e.message);
   }
+});
 
-  // ══════════════════════════════════════════════
-  //  LISTENERS TEMPS RÉEL FIRESTORE
-  // ══════════════════════════════════════════════
-  //
-  // onSnapshot() écoute les changements en temps réel.
-  // Quand un autre utilisateur modifie une demande, ton écran
-  // se met à jour automatiquement sans recharger la page.
+document.getElementById('login-password').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('login-btn').click();
+});
 
-  let _unsubDemandes = null;
-  let _unsubArchives = null;
+document.getElementById('logout-btn').addEventListener('click', function() {
+  if (_unsubDemandes) _unsubDemandes();
+  if (_unsubArchives) _unsubArchives();
+  signOut(auth);
+});
 
-  function startRealtimeListeners() {
-    // Écoute la collection "demandes"
+// ════════════════════════════════════════════════
+//  AUTH STATE
+// ════════════════════════════════════════════════
+var _unsubDemandes = null;
+var _unsubArchives = null;
+
+onAuthStateChanged(auth, async function(user) {
+  if (user) {
+    var snap = await getDoc(doc(firestore, 'users', user.uid));
+    if (!snap.exists()) {
+      await signOut(auth);
+      showLoginError("Profil introuvable. Contactez l'administrateur.");
+      return;
+    }
+    var profile = snap.data();
+    window._session = { user: user, role: profile.role, uid: user.uid };
+
+    // Header
+    document.getElementById('user-nom').textContent = profile.nom || user.email;
+    var badge = document.getElementById('user-role-badge');
+    badge.textContent = profile.role === 'admin' ? 'Admin' : 'Utilisateur';
+    badge.className   = 'role-badge' + (profile.role === 'admin' ? '' : ' user');
+
+    // Affiche l'app
+    document.getElementById('login-screen').classList.remove('visible');
+    document.getElementById('app').style.display = '';
+    document.getElementById('login-btn').textContent = 'Se connecter';
+    document.getElementById('login-btn').disabled = false;
+
+    // Listeners temps réel
     _unsubDemandes = onSnapshot(
-      query(collection(db, 'demandes'), orderBy('date', 'desc')),
-      (snapshot) => {
-        window.dbData = snapshot.docs.map(d => ({ _firestoreId: d.id, ...d.data() }));
+      query(collection(firestore, 'demandes'), orderBy('createdAt', 'desc')),
+      function(snapshot) {
+        window._dbData = snapshot.docs.map(function(d) {
+          return Object.assign({ _fid: d.id }, d.data());
+        });
         renderActif();
-        if (window._applyRoleRestrictions) window._applyRoleRestrictions();
       },
-      (err) => { console.error('Listener demandes:', err); updateSyncPill('err'); }
+      function(err) { console.error('Listener demandes:', err); updateSyncPill('err'); }
     );
 
-    // Écoute la collection "archives"
     _unsubArchives = onSnapshot(
-      query(collection(db, 'archives'), orderBy('archivedAt', 'desc')),
-      (snapshot) => {
-        window.archiveData = snapshot.docs.map(d => ({ _firestoreId: d.id, ...d.data() }));
+      query(collection(firestore, 'archives'), orderBy('archivedAt', 'desc')),
+      function(snapshot) {
+        window._archiveData = snapshot.docs.map(function(d) {
+          return Object.assign({ _fid: d.id }, d.data());
+        });
         renderArchive();
       },
-      (err) => { console.error('Listener archives:', err); }
+      function(err) { console.error('Listener archives:', err); }
     );
 
     updateSyncPill('ok', 'Connecté');
+
+  } else {
+    window._session = { user: null, role: null, uid: null };
+    window._dbData = [];
+    window._archiveData = [];
+    document.getElementById('login-screen').classList.add('visible');
+    document.getElementById('app').style.display = 'none';
+    if (_unsubDemandes) { _unsubDemandes(); _unsubDemandes = null; }
+    if (_unsubArchives) { _unsubArchives(); _unsubArchives = null; }
   }
+});
 
-  // Arrête les listeners à la déconnexion (évite les fuites mémoire)
-  // Géré automatiquement par onAuthStateChanged ci-dessus
+// ════════════════════════════════════════════════
+//  CRUD FIRESTORE (exposé globalement)
+// ════════════════════════════════════════════════
+window.fsCreate = async function(data) {
+  try {
+    await addDoc(collection(firestore, 'demandes'), Object.assign({}, data, {
+      createdBy: window._session.uid,
+      createdAt: Date.now()
+    }));
+    updateSyncPill('ok', 'Sauvegardé');
+  } catch(e) { console.error('fsCreate:', e); updateSyncPill('err', 'Erreur création'); }
+};
 
-  // ══════════════════════════════════════════════
-  //  CRUD FIRESTORE — remplace les appels GitHub API
-  // ══════════════════════════════════════════════
+window.fsUpdate = async function(fid, updates) {
+  try {
+    await updateDoc(doc(firestore, 'demandes', fid), updates);
+    updateSyncPill('ok', 'Sauvegardé');
+  } catch(e) { console.error('fsUpdate:', e); updateSyncPill('err', 'Erreur mise à jour'); }
+};
 
-  // ── CRÉER une demande ──
-  window.firestoreCreate = async function(entryData) {
-    try {
-      const ref = await addDoc(collection(db, 'demandes'), {
-        ...entryData,
-        createdBy: window.currentUser.uid,
-        createdAt: Date.now()
-      });
-      console.log('Demande créée :', ref.id);
-    } catch (e) {
-      console.error('Erreur création:', e);
-      updateSyncPill('err', 'Erreur création');
-    }
-  };
+window.fsDelete = async function(fid) {
+  try { await deleteDoc(doc(firestore, 'demandes', fid)); }
+  catch(e) { console.error('fsDelete:', e); updateSyncPill('err', 'Erreur suppression'); }
+};
 
-  // ── MODIFIER une demande ──
-  window.firestoreUpdate = async function(firestoreId, updates) {
-    try {
-      await updateDoc(doc(db, 'demandes', firestoreId), updates);
-    } catch (e) {
-      console.error('Erreur mise à jour:', e);
-      updateSyncPill('err', 'Erreur mise à jour');
-    }
-  };
+window.fsArchive = async function(fid) {
+  try {
+    var snap = await getDoc(doc(firestore, 'demandes', fid));
+    if (!snap.exists()) return;
+    await setDoc(doc(firestore, 'archives', fid), Object.assign({}, snap.data(), { archivedAt: Date.now() }));
+    await deleteDoc(doc(firestore, 'demandes', fid));
+  } catch(e) { console.error('fsArchive:', e); updateSyncPill('err', 'Erreur archivage'); }
+};
 
-  // ── SUPPRIMER une demande ──
-  window.firestoreDelete = async function(firestoreId) {
-    try {
-      await deleteDoc(doc(db, 'demandes', firestoreId));
-    } catch (e) {
-      console.error('Erreur suppression:', e);
-    }
-  };
+window.fsUnarchive = async function(fid) {
+  try {
+    var snap = await getDoc(doc(firestore, 'archives', fid));
+    if (!snap.exists()) return;
+    var data = Object.assign({}, snap.data());
+    delete data.archivedAt;
+    await setDoc(doc(firestore, 'demandes', fid), data);
+    await deleteDoc(doc(firestore, 'archives', fid));
+  } catch(e) { console.error('fsUnarchive:', e); updateSyncPill('err', 'Erreur désarchivage'); }
+};
 
-  // ── ARCHIVER : déplace de "demandes" vers "archives" ──
-  window.firestoreArchive = async function(firestoreId) {
-    try {
-      const snap  = await getDoc(doc(db, 'demandes', firestoreId));
-      if (!snap.exists()) return;
-      await setDoc(doc(db, 'archives', firestoreId), {
-        ...snap.data(), archivedAt: Date.now()
-      });
-      await deleteDoc(doc(db, 'demandes', firestoreId));
-    } catch (e) {
-      console.error('Erreur archivage:', e);
-    }
-  };
-
-  // ── DÉSARCHIVER : remet dans "demandes" ──
-  window.firestoreUnarchive = async function(firestoreId) {
-    try {
-      const snap = await getDoc(doc(db, 'archives', firestoreId));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      delete data.archivedAt;
-      await setDoc(doc(db, 'demandes', firestoreId), data);
-      await deleteDoc(doc(db, 'archives', firestoreId));
-    } catch (e) {
-      console.error('Erreur désarchivage:', e);
-    }
-  };
-
-  // ── SUPPRIMER une archive ──
-  window.firestoreDeleteArchive = async function(firestoreId) {
-    try {
-      await deleteDoc(doc(db, 'archives', firestoreId));
-    } catch (e) {
-      console.error('Erreur suppression archive:', e);
-    }
-  };
-
+window.fsDeleteArchive = async function(fid) {
+  try { await deleteDoc(doc(firestore, 'archives', fid)); }
+  catch(e) { console.error('fsDeleteArchive:', e); }
+};
 </script>
 
+<!-- ════════════════ LOGIQUE APP ════════════════ -->
 <script>
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+//  CONSTANTES
+// ════════════════════════════════════════════════
+var STATUS_COLS = [
+  {key:'cao',  label:'CAO mise à jour'},
+  {key:'prod', label:'Validation production'},
+  {key:'be',   label:'Validation B.E.'},
+  {key:'pmi',  label:'Mise à jour PMI'}
+];
+var REF_RX       = /^[DS]\d{2}\.\d{3}_([A-Z]|\.\.\.)$/;
+var REF_RX_LOOSE = /^[DS]\d{2}\.\d{3}_?([A-Z]|\.\.\.)$/;
+
+// ════════════════════════════════════════════════
+//  STATE LOCAL
+// ════════════════════════════════════════════════
+window._dbData      = [];
+window._archiveData = [];
+var _confirmCb  = null;
+var _editId     = null;   // _fid Firestore de l'entrée en cours d'édition, ou null
+var _formMedia  = [];
+
+// ════════════════════════════════════════════════
 //  THEME
-// ═══════════════════════════════════════════════════════
-function toggleTheme() {
+// ════════════════════════════════════════════════
+document.getElementById('theme-btn').addEventListener('click', function() {
   var html = document.documentElement;
   var dark = html.getAttribute('data-theme') === 'dark';
   html.setAttribute('data-theme', dark ? 'light' : 'dark');
-  document.getElementById('theme-btn').textContent = dark ? '🌙' : '☀️';
-}
+  this.textContent = dark ? '🌙' : '☀️';
+});
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  CLOCK
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function pad(n) { return String(n).padStart(2, '0'); }
 function formatDate(d) { return pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '/' + d.getFullYear(); }
-function formatTs(ts)  { return ts ? formatDate(new Date(ts)) : ''; }
+function formatTs(ts) { return ts ? formatDate(new Date(ts)) : ''; }
 function todayISO() {
   var d = new Date();
   return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
@@ -654,13 +596,27 @@ function displayToISO(disp) {
 }
 (function tick() {
   var n = new Date();
-  document.getElementById('clock').textContent = formatDate(n) + ' · ' + n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  var el = document.getElementById('clock');
+  if (el) el.textContent = formatDate(n) + ' · ' + n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
   setTimeout(tick, 1000);
 })();
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+//  SYNC PILL
+// ════════════════════════════════════════════════
+function updateSyncPill(state, msg) {
+  var pill = document.getElementById('sync-pill');
+  var txt  = document.getElementById('sync-text');
+  if (!pill) return;
+  pill.className = 'sync-pill';
+  if (state === 'ok')     { pill.classList.add('ok');     txt.textContent = msg || 'Connecté'; }
+  else if (state === 'err')    { pill.classList.add('err');    txt.textContent = msg || 'Erreur'; }
+  else if (state === 'saving') { pill.classList.add('saving'); txt.textContent = 'Sauvegarde…'; }
+}
+
+// ════════════════════════════════════════════════
 //  TABS
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 document.querySelectorAll('.tab').forEach(function(t) {
   t.addEventListener('click', function() {
     document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
@@ -670,9 +626,9 @@ document.querySelectorAll('.tab').forEach(function(t) {
   });
 });
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  REF HELPERS
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function normalizeRef(v) {
   v = v.toUpperCase().trim();
   v = v.replace(/^([DS]\d{2}\.\d{3})([A-Z]|\.\.\.)$/, '$1_$2');
@@ -680,19 +636,31 @@ function normalizeRef(v) {
 }
 function validRef(v) { return REF_RX.test(normalizeRef(v)); }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  MODAL
-// ═══════════════════════════════════════════════════════
-function openModal(editId) {
-  _editId = (editId !== undefined) ? editId : null;
+// ════════════════════════════════════════════════
+document.getElementById('btn-nouvelle').addEventListener('click', function() { openModal(); });
+document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+document.getElementById('modal-submit-btn').addEventListener('click', submitForm);
+document.getElementById('add-ref-btn').addEventListener('click', function() { addRefRow(); });
+document.getElementById('modal-backdrop').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.getElementById('f-desc-same').addEventListener('change', toggleDescMode);
+document.getElementById('f-inc-same').addEventListener('change', toggleIncMode);
+document.getElementById('form-media-in').addEventListener('change', handleFormMedia);
+
+function openModal(editFid) {
+  _editId = editFid || null;
   _formMedia = [];
   var isEdit = _editId !== null;
-  document.getElementById('modal-title').textContent        = isEdit ? 'Modifier la demande' : 'Nouvelle demande';
-  document.getElementById('modal-submit-btn').textContent   = isEdit ? 'Mettre à jour' : 'Enregistrer';
+  document.getElementById('modal-title').textContent      = isEdit ? 'Modifier la demande' : 'Nouvelle demande';
+  document.getElementById('modal-submit-btn').textContent = isEdit ? 'Mettre à jour' : 'Enregistrer';
   document.getElementById('desc-global-block').style.display = '';
-  document.getElementById('desc-per-block').style.display   = 'none';
+  document.getElementById('desc-per-block').style.display    = 'none';
   document.getElementById('inc-global-block').style.display  = '';
-  document.getElementById('inc-per-block').style.display    = 'none';
+  document.getElementById('inc-per-block').style.display     = 'none';
   document.getElementById('desc-per-block').innerHTML = '';
   document.getElementById('inc-per-block').innerHTML  = '';
   document.getElementById('refs-container').innerHTML = '';
@@ -747,24 +715,24 @@ function closeModal() {
   document.getElementById('modal-backdrop').classList.remove('open');
   _formMedia = [];
 }
-document.getElementById('modal-backdrop').addEventListener('click', function(e) {
-  if (e.target === document.getElementById('modal-backdrop')) closeModal();
-});
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  REFS
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function addRefRow(value) {
   value = value || '';
   var c   = document.getElementById('refs-container');
   var row = document.createElement('div');
   row.className = 'ref-row';
   row.innerHTML = '<div class="ref-input-wrap">'
-    + '<input type="text" class="ref-input mono-f" placeholder="D00.000_A ou S00.000_..."'
-    + ' value="' + value + '" oninput="onRefInput(this)" onblur="onRefBlur(this)">'
+    + '<input type="text" class="ref-input mono-f" placeholder="D00.000_A ou S00.000_..." value="' + value + '">'
     + '<div class="ref-warn">&#9888; Format inhabituel — vous pourrez quand même valider.</div>'
     + '</div>'
-    + '<button class="ref-remove" onclick="removeRefRow(this)">&#215;</button>';
+    + '<button class="ref-remove" type="button">&#215;</button>';
+  var inp = row.querySelector('.ref-input');
+  inp.addEventListener('input', function() { onRefInput(this); });
+  inp.addEventListener('blur',  function() { onRefBlur(this); });
+  row.querySelector('.ref-remove').addEventListener('click', function() { removeRefRow(this); });
   c.appendChild(row);
   refreshPerRef();
 }
@@ -822,7 +790,7 @@ function buildPerRef(cid, refs, pfx) {
     var item = document.createElement('div');
     item.className = 'per-ref-item';
     item.innerHTML = '<div class="per-ref-lbl">' + ref + '</div>'
-      + '<textarea class="per-ref-ta" data-ref="' + ref + '" placeholder="' + lbl + ' pour ' + ref + '&#8230;">'
+      + '<textarea class="per-ref-ta" data-ref="' + ref + '" placeholder="' + lbl + ' pour ' + ref + '…">'
       + (ex[ref] || '') + '</textarea>';
     c.appendChild(item);
   });
@@ -842,13 +810,13 @@ function toggleIncMode() {
   if (!s) buildPerRef('inc-per-block', getRefs(), 'inc');
 }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  MÉDIAS FORMULAIRE
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function handleFormMedia(e) {
   var files = Array.from(e.target.files);
-  var done = 0;
   if (!files.length) return;
+  var done = 0;
   files.forEach(function(f) {
     var r = new FileReader();
     r.onload = function(ev) {
@@ -869,24 +837,31 @@ function renderFormMedia() {
     var div = document.createElement('div');
     div.className = 'media-thumb';
     if (m.type === 'application/pdf') {
-      div.innerHTML = '<div class="pdf-icon" onclick="window.open(\'' + m.data + '\',\'_blank\')">'
-        + '<span style="font-size:22px">&#128196;</span><span class="pdf-name">' + m.name + '</span></div>';
+      div.innerHTML = '<div class="pdf-icon"><span style="font-size:22px">📄</span>'
+        + '<span class="pdf-name">' + m.name + '</span></div>';
+      div.querySelector('.pdf-icon').addEventListener('click', function() { window.open(m.data, '_blank'); });
     } else {
-      div.innerHTML = '<img src="' + m.data + '" alt="' + m.name + '" onclick="openLightbox(\'' + m.data + '\')">';
+      var img = document.createElement('img');
+      img.src = m.data; img.alt = m.name;
+      img.addEventListener('click', function() { openLightbox(m.data); });
+      div.appendChild(img);
     }
-    div.innerHTML += '<button class="media-del" onclick="deleteFormMedia(' + i + ')">&#215;</button>';
+    var del = document.createElement('button');
+    del.className = 'media-del'; del.textContent = '×';
+    (function(idx) { del.addEventListener('click', function() { deleteFormMedia(idx); }); })(i);
+    div.appendChild(del);
     g.appendChild(div);
   });
   var uz = document.createElement('div');
   uz.className = 'upload-zone';
-  uz.innerHTML = '<span>&#65291;</span><span>Ajouter</span>';
-  uz.onclick = function() { document.getElementById('form-media-in').click(); };
+  uz.innerHTML = '<span>＋</span><span>Ajouter</span>';
+  uz.addEventListener('click', function() { document.getElementById('form-media-in').click(); });
   g.appendChild(uz);
 }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  SUBMIT
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function doSubmit() {
   var dem      = document.getElementById('f-dem').value.trim();
   var dateISO  = document.getElementById('f-date').value;
@@ -902,49 +877,44 @@ function doSubmit() {
       inc:  incSame  ? document.getElementById('f-inc-global').value.trim()  : (iEl ? iEl.value.trim() : '')
     };
   });
-  if (_editId !== null) {
-    var entry = findEntry(_editId);
-    if (entry) {
-      entry.demandeur = dem;
-      entry.date      = isoToDisplay(dateISO);
-      entry.refData   = refData;
-      entry.media     = _formMedia.slice();
-    }
-  } else {
-      const entryData = {
-    date: isoToDisplay(dateISO), demandeur: dem,
-    refData: refData, media: _formMedia.slice(),
-    statuts: { cao: {val:'a_faire',ts:null}, prod: {val:'a_faire',ts:null},
-               be: {val:'a_faire',ts:null},  pmi:  {val:'a_faire',ts:null} }
-  };
 
   if (_editId !== null) {
-    // Édition : entry._firestoreId est l'ID Firestore
-    const entry = findEntry(_editId);
-    window.firestoreUpdate(entry._firestoreId, {
-      demandeur: dem, date: isoToDisplay(dateISO),
-      refData: refData, media: _formMedia.slice()
+    window.fsUpdate(_editId, {
+      demandeur: dem,
+      date:      isoToDisplay(dateISO),
+      refData:   refData,
+      media:     _formMedia.slice()
     });
   } else {
-    // Création
-    window.firestoreCreate(entryData);
+    window.fsCreate({
+      date:      isoToDisplay(dateISO),
+      demandeur: dem,
+      refData:   refData,
+      media:     _formMedia.slice(),
+      statuts: {
+        cao:  {val:'a_faire', ts:null},
+        prod: {val:'a_faire', ts:null},
+        be:   {val:'a_faire', ts:null},
+        pmi:  {val:'a_faire', ts:null}
+      }
+    });
   }
   closeModal();
-}}
+}
 
 function submitForm() {
   var dem = document.getElementById('f-dem').value.trim();
   if (!dem) { alert('Veuillez renseigner le demandeur.'); return; }
-  var dateISO = document.getElementById('f-date').value;
-  if (!dateISO) { alert('Veuillez saisir une date.'); return; }
+  if (!document.getElementById('f-date').value) { alert('Veuillez saisir une date.'); return; }
   var refs = getRefs();
   if (!refs.length) { alert('Veuillez saisir au moins une référence.'); return; }
   var invalid = getInvalidRefs();
   if (invalid.length > 0) {
-    var list = invalid.map(function(r) { return '  ' + r; }).join('\n');
     showConfirm(
       'Format inhabituel',
-      'Ces références ne correspondent pas au format attendu (X00.000_Y) :\n\n' + list + '\n\nVoulez-vous quand même valider ?',
+      'Ces références ne correspondent pas au format attendu (X00.000_Y) :\n\n'
+        + invalid.map(function(r) { return '  ' + r; }).join('\n')
+        + '\n\nVoulez-vous quand même valider ?',
       'Valider quand même',
       doSubmit,
       true
@@ -954,30 +924,28 @@ function submitForm() {
   doSubmit();
 }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  DETAIL HTML
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function buildDetailHTML(entry) {
   var h = '<div class="detail-grid">';
   entry.refData.forEach(function(rd) {
-    h += '<div class="detail-item"><label>' + rd.ref + ' &#8212; Description</label>'
-      + '<p>' + (rd.desc || '<span style="color:var(--text-muted);font-style:italic">&#8212;</span>') + '</p></div>'
-      + '<div class="detail-item"><label>' + rd.ref + ' &#8212; Incidence</label>'
-      + '<p>' + (rd.inc  || '<span style="color:var(--text-muted);font-style:italic">&#8212;</span>') + '</p></div>';
+    h += '<div class="detail-item"><label>' + rd.ref + ' — Description</label>'
+      + '<p>' + (rd.desc || '<span style="color:var(--text-muted);font-style:italic">—</span>') + '</p></div>'
+      + '<div class="detail-item"><label>' + rd.ref + ' — Incidence</label>'
+      + '<p>' + (rd.inc  || '<span style="color:var(--text-muted);font-style:italic">—</span>') + '</p></div>';
   });
   h += '</div>';
   var media = entry.media || [];
-  h += '<div class="media-section"><div class="media-section-lbl">Médias joints (' + media.length + ')</div><div class="media-gallery">';
-  if (media.length === 0) {
-    h += '<span style="font-family:var(--mono);font-size:10px;color:var(--text-muted)">Aucun média joint.</span>';
-  }
+  h += '<div class="media-section"><div class="media-section-lbl">Médias (' + media.length + ')</div><div class="media-gallery">';
+  if (!media.length) h += '<span style="font-family:var(--mono);font-size:10px;color:var(--text-muted)">Aucun média.</span>';
   media.forEach(function(m) {
     h += '<div class="media-thumb">';
     if (m.type === 'application/pdf') {
-      h += '<div class="pdf-icon" onclick="window.open(\'' + m.data + '\',\'_blank\')">'
-        + '<span style="font-size:22px">&#128196;</span><span class="pdf-name">' + m.name + '</span></div>';
+      h += '<div class="pdf-icon" onclick="window.open(\'' + m.data.replace(/'/g,"\\'") + '\',\'_blank\')">'
+        + '<span style="font-size:22px">📄</span><span class="pdf-name">' + m.name + '</span></div>';
     } else {
-      h += '<img src="' + m.data + '" alt="' + m.name + '" onclick="openLightbox(\'' + m.data + '\')">';
+      h += '<img src="' + m.data + '" alt="' + m.name + '" onclick="openLightbox(\'' + m.data.replace(/'/g,"\\'") + '\')">';
     }
     h += '</div>';
   });
@@ -985,161 +953,216 @@ function buildDetailHTML(entry) {
   return h;
 }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  CONFIRM
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function showConfirm(title, msg, okLbl, cb, warn) {
-  document.getElementById('confirm-title').textContent     = title;
-  document.getElementById('confirm-title').style.color     = warn ? 'var(--orange)' : 'var(--red-del)';
-  document.getElementById('confirm-msg').textContent       = msg;
-  document.getElementById('confirm-ok').textContent        = okLbl;
-  document.getElementById('confirm-ok').style.background   = warn ? 'var(--accent)' : 'var(--red-del)';
-  document.getElementById('confirm-ok').style.color        = '#fff';
+  document.getElementById('confirm-title').textContent   = title;
+  document.getElementById('confirm-title').style.color   = warn ? 'var(--orange)' : 'var(--red-del)';
+  document.getElementById('confirm-msg').textContent     = msg;
+  document.getElementById('confirm-ok').textContent      = okLbl;
+  document.getElementById('confirm-ok').style.background = warn ? 'var(--accent)' : 'var(--red-del)';
+  document.getElementById('confirm-ok').style.color      = '#fff';
   _confirmCb = cb;
   document.getElementById('confirm-bg').classList.add('open');
 }
-function confirmOk() {
+document.getElementById('confirm-ok').addEventListener('click', function() {
   document.getElementById('confirm-bg').classList.remove('open');
   if (_confirmCb) _confirmCb();
   _confirmCb = null;
-}
-function confirmCancel() {
+});
+document.getElementById('confirm-cancel').addEventListener('click', function() {
   document.getElementById('confirm-bg').classList.remove('open');
   _confirmCb = null;
-}
+});
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  LIGHTBOX
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function openLightbox(src) { document.getElementById('lb-img').src = src; document.getElementById('lightbox').classList.add('open'); }
-function closeLightbox()   { document.getElementById('lightbox').classList.remove('open'); }
+document.getElementById('lightbox').addEventListener('click', function() { this.classList.remove('open'); });
+document.getElementById('lb-close').addEventListener('click', function(e) { e.stopPropagation(); document.getElementById('lightbox').classList.remove('open'); });
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  HELPERS
-// ═══════════════════════════════════════════════════════
-function findEntry(firestoreId) {
-  var all = (window.dbData || []).concat(window.archiveData || []);
-  for (var i = 0; i < all.length; i++) {
-    if (all[i]._firestoreId === firestoreId) return all[i];
-  }
+// ════════════════════════════════════════════════
+function findEntry(fid) {
+  var all = (_dbData || []).concat(_archiveData || []);
+  for (var i = 0; i < all.length; i++) { if (all[i]._fid === fid) return all[i]; }
   return null;
 }
 function allDone(entry) {
   return STATUS_COLS.every(function(c) { return entry.statuts[c.key].val === 'a_fait'; });
 }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  RENDER ACTIF
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function renderActif() {
-  var data = window.dbData || [];  // ← données viennent de onSnapshot()
+  var data  = window._dbData || [];
+  var tbody = document.getElementById('tbody-actif');
+  tbody.innerHTML = '';
+  document.getElementById('cnt-actif').textContent      = data.length;
+  document.getElementById('empty-actif').style.display  = data.length === 0 ? '' : 'none';
+  document.getElementById('tbl-actif').style.display    = data.length === 0 ? 'none' : '';
 
   data.forEach(function(entry, idx) {
-    // ⚠️ Utilise entry._firestoreId partout à la place de entry.id
-    // ⚠️ Restreindre les boutons selon le rôle :
+    var isOwner  = window._session.uid && entry.createdBy === window._session.uid;
+    var canEdit   = window.isAdmin() || isOwner;
+    var canAdmin  = window.isAdmin();
 
-    var canDelete  = window.isAdmin();
-    var canArchive = window.isAdmin();
-    var canEdit    = window.isAdmin()
-                     || (window.currentUser && entry.createdBy === window.currentUser.uid);
+    var tr = document.createElement('tr');
+    tr.id  = 'row-' + entry._fid;
+    var sTds = '';
+    STATUS_COLS.forEach(function(col) {
+      var s = entry.statuts[col.key];
+      if (canAdmin) {
+        sTds += '<td><div class="status-cell">'
+          + '<select class="status-select ' + (s.val === 'a_fait' ? 'done' : '') + '"'
+          + ' data-fid="' + entry._fid + '" data-col="' + col.key + '">'
+          + '<option value="a_faire"' + (s.val === 'a_faire' ? ' selected' : '') + '>À faire</option>'
+          + '<option value="a_fait"'  + (s.val === 'a_fait'  ? ' selected' : '') + '>Fait ✓</option>'
+          + '</select>'
+          + (s.ts ? '<span class="status-ts">' + formatTs(s.ts) + '</span>' : '')
+          + '</div></td>';
+      } else {
+        sTds += '<td><div class="status-cell">'
+          + '<span class="badge ' + (s.val === 'a_fait' ? 'done' : '') + '" style="' + (s.val === 'a_fait' ? 'color:var(--green);border-color:rgba(46,158,94,.3)' : '') + '">'
+          + (s.val === 'a_fait' ? 'Fait ✓' : 'À faire') + '</span>'
+          + (s.ts ? '<span class="status-ts">' + formatTs(s.ts) + '</span>' : '')
+          + '</div></td>';
+      }
+    });
 
-    tr.innerHTML = '...'
-      // Bouton éditer : visible uniquement si canEdit
-      + (canEdit    ? '<button class="btn-sm blue" onclick="openModal(\'' + entry._firestoreId + '\')">✎ Éditer</button>' : '')
-      + (canArchive ? '<button class="btn-sm green" ...>Archiver</button>' : '')
-      + (canDelete  ? '<button class="btn-sm red" ...>✕</button>' : '')
-      + '...';
+    var done = allDone(entry);
+    var refs = entry.refData.map(function(r) { return '<span class="badge badge-accent">' + r.ref + '</span>'; }).join('');
+    var actions = '<div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">';
+    if (canEdit)  actions += '<button class="btn-sm blue" data-action="edit"       data-fid="' + entry._fid + '">✎ Éditer</button>';
+    if (canAdmin) actions += '<button class="btn-sm green" data-action="archive"   data-fid="' + entry._fid + '"' + (done ? '' : ' disabled') + '>Archiver</button>';
+    if (canAdmin) actions += '<button class="btn-sm red"  data-action="delete"     data-fid="' + entry._fid + '">✕</button>';
+    actions += '</div>';
+
+    tr.innerHTML = '<td><button class="expand-btn" data-target="det-' + entry._fid + '">▸</button></td>'
+      + '<td class="mono" style="color:var(--text-muted)">#' + String(idx+1).padStart(3,'0') + '</td>'
+      + '<td class="mono">' + entry.date + '</td>'
+      + '<td>' + entry.demandeur + '</td>'
+      + '<td>' + refs + '</td>'
+      + sTds
+      + '<td>' + actions + '</td>';
+    tbody.appendChild(tr);
+
+    var dtr = document.createElement('tr');
+    dtr.id = 'det-' + entry._fid; dtr.className = 'detail-row';
+    dtr.innerHTML = '<td colspan="10">' + buildDetailHTML(entry) + '</td>';
+    tbody.appendChild(dtr);
   });
+
+  // Listeners délégués pour cette table
+  attachTableListeners('tbody-actif', false);
 }
 
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  RENDER ARCHIVE
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function renderArchive() {
+  var data  = window._archiveData || [];
   var tbody = document.getElementById('tbody-archive');
   tbody.innerHTML = '';
-  document.getElementById('cnt-archive').textContent      = archive.length;
-  document.getElementById('empty-archive').style.display  = archive.length === 0 ? '' : 'none';
-  document.getElementById('tbl-archive').style.display    = archive.length === 0 ? 'none' : '';
+  document.getElementById('cnt-archive').textContent     = data.length;
+  document.getElementById('empty-archive').style.display = data.length === 0 ? '' : 'none';
+  document.getElementById('tbl-archive').style.display   = data.length === 0 ? 'none' : '';
 
-  archive.forEach(function(entry, idx) {
+  data.forEach(function(entry, idx) {
     var tr = document.createElement('tr');
-    tr.id  = 'arow-' + entry.id;
+    tr.id  = 'arow-' + entry._fid;
     var sTds = '';
     STATUS_COLS.forEach(function(col) {
       var s = entry.statuts[col.key];
       sTds += '<td><div class="status-cell">'
-        + '<span class="badge" style="color:var(--green);border-color:rgba(46,158,94,.3)">Fait &#10003;</span>'
+        + '<span class="badge" style="color:var(--green);border-color:rgba(46,158,94,.3)">Fait ✓</span>'
         + (s.ts ? '<span class="status-ts">' + formatTs(s.ts) + '</span>' : '')
         + '</div></td>';
     });
     var refs = entry.refData.map(function(r) { return '<span class="badge">' + r.ref + '</span>'; }).join('');
-    tr.innerHTML = '<td><button class="expand-btn" id="aeb-' + entry.id + '" onclick="toggleADetail(' + entry.id + ')">&#9658;</button></td>'
+    var canAdmin = window.isAdmin();
+    var actions = '<div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">';
+    if (canAdmin) actions += '<button class="btn-sm" data-action="unarchive" data-fid="' + entry._fid + '">↩ Désarchiver</button>';
+    if (canAdmin) actions += '<button class="btn-sm red" data-action="delarc"  data-fid="' + entry._fid + '">✕</button>';
+    actions += '</div>';
+
+    tr.innerHTML = '<td><button class="expand-btn" data-target="adet-' + entry._fid + '">▸</button></td>'
       + '<td class="mono" style="color:var(--text-muted)">#' + String(idx+1).padStart(3,'0') + '</td>'
       + '<td class="mono">' + entry.date + '</td>'
       + '<td>' + entry.demandeur + '</td>'
       + '<td>' + refs + '</td>'
       + sTds
       + '<td class="mono" style="font-size:10px;color:var(--text-muted)">' + formatTs(entry.archivedAt) + '</td>'
-      + '<td><div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:1px">'
-      + '<button class="btn-sm" onclick="unarchiveEntry(' + entry.id + ')">&#8629; D&#233;sarchiver</button>'
-      + '<button class="btn-sm red" onclick="deleteArchive(' + entry.id + ')">&#10005;</button>'
-      + '</div></td>';
+      + '<td>' + actions + '</td>';
     tbody.appendChild(tr);
+
     var dtr = document.createElement('tr');
-    dtr.id  = 'adet-' + entry.id;
-    dtr.className = 'detail-row';
+    dtr.id = 'adet-' + entry._fid; dtr.className = 'detail-row';
     dtr.innerHTML = '<td colspan="11">' + buildDetailHTML(entry) + '</td>';
     tbody.appendChild(dtr);
   });
+
+  attachTableListeners('tbody-archive', true);
 }
 
-function renderAll() { renderActif(); renderArchive(); }
+// ════════════════════════════════════════════════
+//  LISTENERS DÉLÉGUÉS (un seul handler par tbody)
+// ════════════════════════════════════════════════
+function attachTableListeners(tbodyId, isArchive) {
+  var tbody = document.getElementById(tbodyId);
 
-// ═══════════════════════════════════════════════════════
-//  ACTIONS
-// ═══════════════════════════════════════════════════════
-function changeStatus(firestoreId, col, sel) {
-  var updates = {};
-  updates['statuts.' + col + '.val'] = sel.value;
-  updates['statuts.' + col + '.ts']  = sel.value === 'a_fait' ? Date.now() : null;
-  window.firestoreUpdate(firestoreId, updates);
-}
-function archiveEntry(firestoreId) {
-  window.firestoreArchive(firestoreId);
-}
-function unarchiveEntry(firestoreId) {
-  window.firestoreUnarchive(firestoreId);
-}
-function deleteEntry(firestoreId) {
-  showConfirm('Supprimer', '...', 'Supprimer', function() {
-    window.firestoreDelete(firestoreId);
+  // Expand
+  tbody.querySelectorAll('.expand-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = this.getAttribute('data-target');
+      var dtr = document.getElementById(targetId);
+      if (!dtr) return;
+      var open = dtr.classList.contains('open');
+      dtr.classList.toggle('open', !open);
+      this.classList.toggle('open', !open);
+      this.textContent = open ? '▸' : '▾';
+    });
+  });
+
+  // Status selects (admin only, actif only)
+  if (!isArchive) {
+    tbody.querySelectorAll('.status-select').forEach(function(sel) {
+      sel.addEventListener('change', function() {
+        var fid = this.getAttribute('data-fid');
+        var col = this.getAttribute('data-col');
+        var updates = {};
+        updates['statuts.' + col + '.val'] = this.value;
+        updates['statuts.' + col + '.ts']  = this.value === 'a_fait' ? Date.now() : null;
+        window.fsUpdate(fid, updates);
+      });
+    });
+  }
+
+  // Action buttons
+  tbody.querySelectorAll('[data-action]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var fid    = this.getAttribute('data-fid');
+      var action = this.getAttribute('data-action');
+      if (action === 'edit') {
+        openModal(fid);
+      } else if (action === 'archive') {
+        window.fsArchive(fid);
+      } else if (action === 'delete') {
+        showConfirm('Supprimer la demande', 'Cette demande sera définitivement supprimée.', 'Supprimer',
+          function() { window.fsDelete(fid); });
+      } else if (action === 'unarchive') {
+        window.fsUnarchive(fid);
+      } else if (action === 'delarc') {
+        showConfirm('Supprimer l\'archive', 'Cette entrée sera définitivement supprimée.', 'Supprimer',
+          function() { window.fsDeleteArchive(fid); });
+      }
+    });
   });
 }
-function deleteArchive(firestoreId) {
-  showConfirm('Supprimer', '...', 'Supprimer', function() {
-    window.firestoreDeleteArchive(firestoreId);
-  });
-}
-function toggleDetail(id) {
-  var dtr = document.getElementById('det-'  + id);
-  var btn = document.getElementById('eb-'   + id);
-  var open = dtr.classList.contains('open');
-  dtr.classList.toggle('open', !open); btn.classList.toggle('open', !open);
-  btn.textContent = open ? '\u25B8' : '\u25BE';
-}
-function toggleADetail(id) {
-  var dtr = document.getElementById('adet-' + id);
-  var btn = document.getElementById('aeb-'  + id);
-  var open = dtr.classList.contains('open');
-  dtr.classList.toggle('open', !open); btn.classList.toggle('open', !open);
-  btn.textContent = open ? '\u25B8' : '\u25BE';
-}
-
-// ═══════════════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════════════
-loadFromGitHub();
 </script>
 </body>
 </html>
