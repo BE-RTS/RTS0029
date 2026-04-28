@@ -1,21 +1,22 @@
-# 1. BUT
+# SQP06
+## 1. BUT
 
 Cette procédure définit les modalités mises en place en cas de modification de nos produits standards; fabriqués, sous-traités ou achetés.
 
-# **2. DOMAINE D'APPLICATION**
+## **2. DOMAINE D'APPLICATION**
 
 Cette procédure s'applique à l'ensemble de nos produits standards référencés par nos plans validés par le responsable technique et le BE.
 
-# **3. DOCUMENTS ASSOCIES**
+## **3. DOCUMENTS ASSOCIES**
 
 - Fiche de modification de produit **RTS0029**
 - Fiche de demande de conception **RTS0031**
 
-# **4. DOCUMENT DE REFERENCE**
+## **4. DOCUMENT DE REFERENCE**
 
 Norme ISO 9001/2015 Système de management de la qualité.
 
-# **5. CONTENU**
+## **5. CONTENU**
 
 Deux types de modifications :
 
@@ -35,7 +36,7 @@ Deux types de modifications :
 
 **Ce type de modification ne peut intervenir qu'après accord des services concernés.**
 
-# 6. **DEROULEMENT DES OPERATIONS**
+## 6. **DEROULEMENT DES OPERATIONS**
 
 - La demande doit être envoyée au bureau d'études pour examen.
 - Dans le cas ou la modification technique est possible, le bureau d'études donne son accord et réalise un plan, avec changement d'indice.
@@ -46,6 +47,6 @@ Deux types de modifications :
 
 **Seul le bureau d'études est habilité à apporter une modification sur nos plans et les met à disposition dans PMI.**
 
-# 7. STOCKAGE
+## 7. STOCKAGE
 
 Pour le bureau d'études, les plans sont archivés informatiquement ou par classement par référence dans les armoires.
