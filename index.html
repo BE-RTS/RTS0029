@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Mise à Jour Plans</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='6' fill='%23AA0E10'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='36' font-family='monospace' fill='white'>P</text></svg>">
+<title>RTS00029</title>
+<link rel="icon" href="img/logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -380,13 +380,12 @@ import { updatePassword }
 //  ⚙️  CONFIG FIREBASE — remplace ces valeurs
 // ════════════════════════════════════════════════
 const firebaseConfig = {
-  apiKey: "AIzaSyBLHw6yeiqeJTtp2O8KDUl7_xu0Dg-sxHM",
-  authDomain: "rts00029-5ef6a.firebaseapp.com",
-  projectId: "rts00029-5ef6a",
-  storageBucket: "rts00029-5ef6a.firebasestorage.app",
+  apiKey:            "AIzaSyBLHw6yeiqeJTtp2O8KDUl7_xu0Dg-sxHM",
+  authDomain:        "rts00029-5ef6a.firebaseapp.com",
+  projectId:         "rts00029-5ef6a",
+  storageBucket:     "rts00029-5ef6a.firebasestorage.app",
   messagingSenderId: "796484288528",
-  appId: "1:796484288528:web:ab0d71ea9905a4eb150a95",
-  measurementId: "G-J8E5H0MDRM"
+  appId:             "1:796484288528:web:ab0d71ea9905a4eb150a95"
 };
 
 // ════════════════════════════════════════════════
@@ -487,6 +486,8 @@ onAuthStateChanged(auth, async function(user) {
     document.getElementById('chpwd-screen').classList.remove('visible');
     document.getElementById('app').style.display = '';
 
+    // Stocke le nom pour usage dans openModal()
+    window._session.nom = profile.nom || user.email;
     // Charge la liste des utilisateurs pour le formulaire
     loadUsersList(profile.role, profile.nom || user.email);
 
@@ -534,29 +535,40 @@ onAuthStateChanged(auth, async function(user) {
 //  LISTE UTILISATEURS pour datalist demandeur
 // ════════════════════════════════════════════════
 async function loadUsersList(role, currentNom) {
-  var dl = document.getElementById('dem-list');
+  var dl    = document.getElementById('dem-list');
   var input = document.getElementById('f-dem');
+
   if (role !== 'admin') {
     // Utilisateur : champ verrouillé sur son propre nom
-    input.value    = currentNom;
-    input.readOnly = true;
+    window._userNoms  = [currentNom];
+    window._isAdminSession = false;
+    input.value       = currentNom;
+    input.readOnly    = true;
     input.style.color = 'var(--text-dim)';
-    dl.innerHTML = '';
+    input.style.cursor = 'default';
+    dl.innerHTML      = '';
     return;
   }
-  // Admin : champ libre avec autofill sur tous les utilisateurs
-  input.readOnly = false;
-  input.style.color = '';
+
+  // Admin : charge tous les noms depuis Firestore
+  window._isAdminSession = true;
+  input.readOnly     = false;
+  input.style.color  = '';
+  input.style.cursor = '';
   try {
     var snap = await getDocs(collection(firestore, 'users'));
-    dl.innerHTML = '';
+    var noms = [];
     snap.forEach(function(d) {
       var nom = d.data().nom;
-      if (nom) {
-        var opt = document.createElement('option');
-        opt.value = nom;
-        dl.appendChild(opt);
-      }
+      if (nom) noms.push(nom);
+    });
+    window._userNoms = noms;
+    // Peuple le datalist
+    dl.innerHTML = '';
+    noms.forEach(function(nom) {
+      var opt = document.createElement('option');
+      opt.value = nom;
+      dl.appendChild(opt);
     });
   } catch(e) { console.error('loadUsersList:', e); }
 }
@@ -812,11 +824,31 @@ function openModal(editFid) {
     _formMedia = entry.media ? entry.media.slice() : [];
   } else {
     document.getElementById('f-date').value        = todayISO();
-    document.getElementById('f-dem').value         = '';
     document.getElementById('f-desc-global').value = '';
     document.getElementById('f-inc-global').value  = '';
     document.getElementById('f-desc-same').checked = true;
     document.getElementById('f-inc-same').checked  = true;
+    // Demandeur : auto-rempli pour utilisateur, vide pour admin
+    var demInput = document.getElementById('f-dem');
+    if (!window._isAdminSession) {
+      demInput.value    = window._session.nom || '';
+      demInput.readOnly = true;
+      demInput.style.color  = 'var(--text-dim)';
+      demInput.style.cursor = 'default';
+    } else {
+      demInput.value    = '';
+      demInput.readOnly = false;
+      demInput.style.color  = '';
+      demInput.style.cursor = '';
+      // Recharge le datalist au cas où
+      var dl = document.getElementById('dem-list');
+      if (dl.children.length === 0 && window._userNoms) {
+        window._userNoms.forEach(function(nom) {
+          var opt = document.createElement('option');
+          opt.value = nom; dl.appendChild(opt);
+        });
+      }
+    }
     addRefRow();
   }
   renderFormMedia();
