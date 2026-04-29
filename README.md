@@ -317,7 +317,7 @@ git push origin main
 
 Pour que Firebase Auth accepte les connexions depuis GitHub Pages :
 **Firebase Console → Authentication → Settings → Authorized domains**
-→ `TON_USERNAME.github.io` doit être dans la liste.
+→ `BE-RTS.github.io` doit être dans la liste.
 
 ---
 
