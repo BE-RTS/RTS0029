@@ -55,16 +55,17 @@ les **Security Rules Firestore**, pas par un serveur intermédiaire.
 ## 2. Structure du repository
 
 ```
-ton-repo/                         ← GitHub (code source)
+RTS00029/                         ← GitHub (code source)
 │
 ├── index.html                    ← Toute l'application (HTML + CSS + JS)
 ├── img/
 │   └── logo.png                  ← Favicon et logo
+├── SQP06.md                      ← Document unique
 └── README.md                     ← Ce fichier
 ```
 
 **Hébergement :** GitHub Pages (branche `main`, dossier racine)
-**URL publique :** `https://TON_USERNAME.github.io/TON_REPO/`
+**URL publique :** `BE-RTS.github.io/RTS00029/`
 
 ---
 
