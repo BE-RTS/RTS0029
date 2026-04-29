@@ -7,16 +7,16 @@ Dernière mise à jour : 2026
 
 ## Sommaire
 
-1. [Vue d'ensemble](## 1. Vue d'ensemble)
-2. [Structure du repository GitHub]
-3. [Firebase - Ce qui est stocké où]
-4. [Structure des données Firestore]
-5. [Règles de sécurité]
-6. [Rôles et permissions]
-7. [Flux de données]
-8. [Gestion des utilisateurs]
-9. [Déploiement]
-10. [Maintenance & opérations courantes]
+1. Vue d'ensemble
+2. Structure du repository GitHub
+3. Firebase - Ce qui est stocké où
+4. Structure des données Firestore
+5. Règles de sécurité
+6. Rôles et permissions
+7. Flux de données
+8. Gestion des utilisateurs
+9. Déploiement
+10. [Maintenance & opérations courantes
 
 ---
 
