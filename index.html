@@ -108,7 +108,7 @@ td.mono{font-family:var(--mono);font-size:10.5px}
 /* ── DETAIL ROW ── */
 .detail-row{display:none}.detail-row.open{display:table-row}
 .detail-row>td{background:var(--surface2);padding:14px 18px 18px;border-left:3px solid var(--accent)}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 .detail-item label{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px}
 .detail-item p{font-size:12px;line-height:1.55;color:var(--text)}
 
@@ -294,8 +294,9 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
     <div class="modal-body">
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label" for="f-dem">Demandeur</label>
-          <input class="form-input" type="text" id="f-dem" list="dem-list" placeholder="Sélectionner ou saisir…" autocomplete="off" readonly>
+          <label class="form-label">Demandeur</label>
+          <input class="form-input" type="text" id="f-dem"
+            list="dem-list" placeholder="Saisir ou sélectionner…">
           <datalist id="dem-list"></datalist>
         </div>
         <div class="form-group">
@@ -309,6 +310,18 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
         <div class="hint">Format : <span class="hint-a">D00.000_A</span> ou <span class="hint-a">S00.000_...</span> — majuscules auto, underscore ajouté si absent.</div>
         <div class="refs-container" id="refs-container"></div>
         <button class="add-ref-btn" id="add-ref-btn">+ Ajouter une référence</button>
+      </div>
+      <hr class="sep">
+      <div class="form-group">
+        <div class="check-row">
+          <input type="checkbox" id="f-desig-same" checked onchange="toggleDesigMode()">
+          <label for="f-desig-same" class="check-lbl">Même désignation pour toutes les références</label>
+        </div>
+        <div id="desig-global-block">
+          <label class="form-label">Désignation</label>
+          <input class="form-input" type="text" id="f-desig-global" placeholder="Désignation du plan/document…">
+        </div>
+        <div id="desig-per-block" class="per-ref-block" style="display:none"></div>
       </div>
       <hr class="sep">
       <div class="form-group">
@@ -534,43 +547,10 @@ onAuthStateChanged(auth, async function(user) {
 // ════════════════════════════════════════════════
 //  LISTE UTILISATEURS pour datalist demandeur
 // ════════════════════════════════════════════════
-async function loadUsersList(role, currentNom) {
-  var dl    = document.getElementById('dem-list');
-  var input = document.getElementById('f-dem');
-
-  if (role !== 'admin') {
-    // Utilisateur : champ verrouillé sur son propre nom
-    window._userNoms  = [currentNom];
-    window._isAdminSession = false;
-    input.value       = currentNom;
-    input.readOnly    = true;
-    input.style.color = 'var(--text-dim)';
-    input.style.cursor = 'default';
-    dl.innerHTML      = '';
-    return;
-  }
-
-  // Admin : charge tous les noms depuis Firestore
-  window._isAdminSession = true;
-  input.readOnly     = false;
-  input.style.color  = '';
-  input.style.cursor = '';
-  try {
-    var snap = await getDocs(collection(firestore, 'users'));
-    var noms = [];
-    snap.forEach(function(d) {
-      var nom = d.data().nom;
-      if (nom) noms.push(nom);
-    });
-    window._userNoms = noms;
-    // Peuple le datalist
-    dl.innerHTML = '';
-    noms.forEach(function(nom) {
-      var opt = document.createElement('option');
-      opt.value = nom;
-      dl.appendChild(opt);
-    });
-  } catch(e) { console.error('loadUsersList:', e); }
+function loadUsersList(role, currentNom) {
+  // Stocke simplement le rôle et le nom — le datalist est peuplé à l'ouverture du modal
+  window._isAdminSession = (role === 'admin');
+  window._currentNom     = currentNom;
 }
 
 // ════════════════════════════════════════════════
@@ -610,6 +590,23 @@ document.getElementById('chpwd-btn').addEventListener('click', async function() 
 // ════════════════════════════════════════════════
 //  CRUD FIRESTORE (exposé globalement)
 // ════════════════════════════════════════════════
+// Expose getDocs users pour le script classique
+window.fsGetUsers = async function() {
+  try {
+    var snap = await getDocs(collection(firestore, 'users'));
+    var noms = [];
+    snap.forEach(function(d) {
+      var nom = d.data().nom;
+      if (nom) noms.push(nom);
+    });
+    noms.sort();
+    return noms;
+  } catch(e) {
+    console.error('fsGetUsers:', e);
+    return [];
+  }
+};
+
 window.fsCreate = async function(data) {
   try {
     await addDoc(collection(firestore, 'demandes'), Object.assign({}, data, {
@@ -663,6 +660,14 @@ window.fsDeleteArchive = async function(fid) {
 // ════════════════════════════════════════════════
 //  CONSTANTES
 // ════════════════════════════════════════════════
+// Gestion du select admin → champ libre si "Autre"
+// (select supprimé — datalist natif utilisé)
+
+// Récupère la valeur demandeur selon le mode (select ou input)
+function getDemandeurValue() {
+  return document.getElementById('f-dem').value.trim();
+}
+
 var STATUS_COLS = [
   {key:'cao',  label:'CAO mise à jour'},
   {key:'prod', label:'Validation production'},
@@ -792,13 +797,43 @@ function openModal(editFid) {
   if (isEdit) {
     var entry = findEntry(_editId);
     if (!entry) return;
-    document.getElementById('f-dem').value  = entry.demandeur;
+    // En édition : pré-remplir le champ demandeur
+    var _inpEdit = document.getElementById('f-dem');
+    var _dlEdit  = document.getElementById('dem-list');
+    _inpEdit.value    = entry.demandeur;
+    _inpEdit.readOnly = !window._isAdminSession;
+    _inpEdit.style.color  = _inpEdit.readOnly ? 'var(--text-dim)' : '';
+    _inpEdit.style.cursor = _inpEdit.readOnly ? 'default' : '';
+    _dlEdit.innerHTML = '';
+    if (window._isAdminSession && window.fsGetUsers) {
+      window.fsGetUsers().then(function(noms) {
+        noms.forEach(function(nom) {
+          var opt = document.createElement('option');
+          opt.value = nom; _dlEdit.appendChild(opt);
+        });
+      });
+    }
     document.getElementById('f-date').value = displayToISO(entry.date);
     entry.refData.forEach(function(rd) { addRefRow(rd.ref); });
     var descSame = entry.refData.every(function(r) { return r.desc === entry.refData[0].desc; });
     var incSame  = entry.refData.every(function(r) { return r.inc  === entry.refData[0].inc;  });
-    document.getElementById('f-desc-same').checked = descSame;
-    document.getElementById('f-inc-same').checked  = incSame;
+    var desigSameEdit = entry.refData.every(function(r) { return r.desig === entry.refData[0].desig; });
+    document.getElementById('f-desig-same').checked = desigSameEdit;
+    document.getElementById('f-desc-same').checked  = descSame;
+    document.getElementById('f-inc-same').checked   = incSame;
+    if (desigSameEdit) {
+      document.getElementById('desig-global-block').style.display = '';
+      document.getElementById('desig-per-block').style.display    = 'none';
+      document.getElementById('f-desig-global').value = entry.refData[0].desig || '';
+    } else {
+      document.getElementById('desig-global-block').style.display = 'none';
+      document.getElementById('desig-per-block').style.display    = '';
+      buildPerRef('desig-per-block', entry.refData.map(function(r) { return r.ref; }), 'desig');
+      entry.refData.forEach(function(rd) {
+        var el = document.querySelector('#desig-per-block input[data-ref="' + rd.ref + '"]');
+        if (el) el.value = rd.desig || '';
+      });
+    }
     if (descSame) {
       document.getElementById('f-desc-global').value = entry.refData[0].desc || '';
     } else {
@@ -824,28 +859,40 @@ function openModal(editFid) {
     _formMedia = entry.media ? entry.media.slice() : [];
   } else {
     document.getElementById('f-date').value        = todayISO();
-    document.getElementById('f-desc-global').value = '';
-    document.getElementById('f-inc-global').value  = '';
-    document.getElementById('f-desc-same').checked = true;
-    document.getElementById('f-inc-same').checked  = true;
+    document.getElementById('f-desig-global').value = '';
+    document.getElementById('f-desc-global').value  = '';
+    document.getElementById('f-inc-global').value   = '';
+    document.getElementById('f-desig-same').checked = true;
+    document.getElementById('f-desc-same').checked  = true;
+    document.getElementById('f-inc-same').checked   = true;
+    document.getElementById('desig-global-block').style.display = '';
+    document.getElementById('desig-per-block').style.display    = 'none';
     // Demandeur : auto-rempli pour utilisateur, vide pour admin
     var demInput = document.getElementById('f-dem');
+    var dl       = document.getElementById('dem-list');
     if (!window._isAdminSession) {
-      demInput.value    = window._session.nom || '';
+      // Utilisateur : champ verrouillé sur son propre nom
+      demInput.value    = window._currentNom || window._session.nom || '';
       demInput.readOnly = true;
       demInput.style.color  = 'var(--text-dim)';
       demInput.style.cursor = 'default';
+      dl.innerHTML = '';
     } else {
+      // Admin : champ libre + datalist depuis Firestore
       demInput.value    = '';
       demInput.readOnly = false;
       demInput.style.color  = '';
       demInput.style.cursor = '';
-      // Recharge le datalist au cas où
-      var dl = document.getElementById('dem-list');
-      if (dl.children.length === 0 && window._userNoms) {
-        window._userNoms.forEach(function(nom) {
-          var opt = document.createElement('option');
-          opt.value = nom; dl.appendChild(opt);
+      dl.innerHTML = '';
+      // Peuple le datalist de manière asynchrone
+      if (window.fsGetUsers) {
+        window.fsGetUsers().then(function(noms) {
+          dl.innerHTML = '';
+          noms.forEach(function(nom) {
+            var opt = document.createElement('option');
+            opt.value = nom;
+            dl.appendChild(opt);
+          });
         });
       }
     }
@@ -920,26 +967,38 @@ function getInvalidRefs() {
 
 function refreshPerRef() {
   var refs = getRefs();
-  if (!document.getElementById('f-desc-same').checked) buildPerRef('desc-per-block', refs, 'desc');
-  if (!document.getElementById('f-inc-same').checked)  buildPerRef('inc-per-block',  refs, 'inc');
+  if (!document.getElementById('f-desig-same').checked) buildPerRef('desig-per-block', refs, 'desig');
+  if (!document.getElementById('f-desc-same').checked)  buildPerRef('desc-per-block',  refs, 'desc');
+  if (!document.getElementById('f-inc-same').checked)   buildPerRef('inc-per-block',   refs, 'inc');
 }
 
 function buildPerRef(cid, refs, pfx) {
-  var c = document.getElementById(cid);
+  var container = document.getElementById(cid);
   var ex = {};
-  c.querySelectorAll('textarea').forEach(function(t) { ex[t.dataset.ref] = t.value; });
-  c.innerHTML = '';
+  container.querySelectorAll('[data-ref]').forEach(function(t) { ex[t.dataset.ref] = t.value; });
+  container.innerHTML = '';
   refs.forEach(function(ref) {
-    var lbl  = pfx === 'desc' ? 'Description' : 'Incidence';
+    var lbl  = pfx === 'desig' ? 'Désignation' : pfx === 'desc' ? 'Description' : 'Incidence';
     var item = document.createElement('div');
     item.className = 'per-ref-item';
-    item.innerHTML = '<div class="per-ref-lbl">' + ref + '</div>'
-      + '<textarea class="per-ref-ta" data-ref="' + ref + '" placeholder="' + lbl + ' pour ' + ref + '…">'
-      + (ex[ref] || '') + '</textarea>';
-    c.appendChild(item);
+    if (pfx === 'desig') {
+      item.innerHTML = '<div class="per-ref-lbl">' + ref + '</div>'
+        + '<input type="text" class="form-input" style="margin-top:2px" data-ref="' + ref + '" placeholder="' + lbl + ' pour ' + ref + '…" value="' + (ex[ref] || '') + '">';
+    } else {
+      item.innerHTML = '<div class="per-ref-lbl">' + ref + '</div>'
+        + '<textarea class="per-ref-ta" data-ref="' + ref + '" placeholder="' + lbl + ' pour ' + ref + '…">'
+        + (ex[ref] || '') + '</textarea>';
+    }
+    container.appendChild(item);
   });
 }
 
+function toggleDesigMode() {
+  var s = document.getElementById('f-desig-same').checked;
+  document.getElementById('desig-global-block').style.display = s ? '' : 'none';
+  document.getElementById('desig-per-block').style.display    = s ? 'none' : '';
+  if (!s) buildPerRef('desig-per-block', getRefs(), 'desig');
+}
 function toggleDescMode() {
   var s = document.getElementById('f-desc-same').checked;
   document.getElementById('desc-global-block').style.display = s ? '' : 'none';
@@ -1007,18 +1066,21 @@ function renderFormMedia() {
 //  SUBMIT
 // ════════════════════════════════════════════════
 function doSubmit() {
-  var dem      = document.getElementById('f-dem').value.trim();
+  var dem      = getDemandeurValue();
   var dateISO  = document.getElementById('f-date').value;
   var refs     = getRefs();
   var descSame = document.getElementById('f-desc-same').checked;
   var incSame  = document.getElementById('f-inc-same').checked;
+  var desigSame = document.getElementById('f-desig-same').checked;
   var refData  = refs.map(function(ref) {
-    var dEl = document.querySelector('#desc-per-block textarea[data-ref="' + ref + '"]');
-    var iEl = document.querySelector('#inc-per-block textarea[data-ref="' + ref + '"]');
+    var dEl  = document.querySelector('#desc-per-block textarea[data-ref="' + ref + '"]');
+    var iEl  = document.querySelector('#inc-per-block textarea[data-ref="' + ref + '"]');
+    var dgEl = document.querySelector('#desig-per-block input[data-ref="' + ref + '"]');
     return {
-      ref:  ref,
-      desc: descSame ? document.getElementById('f-desc-global').value.trim() : (dEl ? dEl.value.trim() : ''),
-      inc:  incSame  ? document.getElementById('f-inc-global').value.trim()  : (iEl ? iEl.value.trim() : '')
+      ref:   ref,
+      desig: desigSame ? document.getElementById('f-desig-global').value.trim() : (dgEl ? dgEl.value.trim() : ''),
+      desc:  descSame  ? document.getElementById('f-desc-global').value.trim()  : (dEl  ? dEl.value.trim()  : ''),
+      inc:   incSame   ? document.getElementById('f-inc-global').value.trim()   : (iEl  ? iEl.value.trim()  : '')
     };
   });
 
@@ -1028,6 +1090,7 @@ function doSubmit() {
       date:      isoToDisplay(dateISO),
       refData:   refData,
       media:     _formMedia.slice()
+      // désignation incluse dans refData par ref
     });
   } else {
     window.fsCreate({
@@ -1047,7 +1110,7 @@ function doSubmit() {
 }
 
 function submitForm() {
-  var dem = document.getElementById('f-dem').value.trim();
+  var dem = getDemandeurValue();
   if (!dem) { alert('Veuillez renseigner le demandeur.'); return; }
   if (!document.getElementById('f-date').value) { alert('Veuillez saisir une date.'); return; }
   var refs = getRefs();
@@ -1074,7 +1137,9 @@ function submitForm() {
 function buildDetailHTML(entry) {
   var h = '<div class="detail-grid">';
   entry.refData.forEach(function(rd) {
-    h += '<div class="detail-item"><label>' + rd.ref + ' — Description</label>'
+    h += '<div class="detail-item"><label>' + rd.ref + ' — Désignation</label>'
+      + '<p>' + (rd.desig || '<span style="color:var(--text-muted);font-style:italic">—</span>') + '</p></div>'
+      + '<div class="detail-item"><label>' + rd.ref + ' — Description</label>'
       + '<p>' + (rd.desc || '<span style="color:var(--text-muted);font-style:italic">—</span>') + '</p></div>'
       + '<div class="detail-item"><label>' + rd.ref + ' — Incidence</label>'
       + '<p>' + (rd.inc  || '<span style="color:var(--text-muted);font-style:italic">—</span>') + '</p></div>';
