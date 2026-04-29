@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Mise à Jour Plans</title>
+<title>RTS00029</title>
 <link rel="icon" href="img/logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -144,7 +144,6 @@ td.mono{font-family:var(--mono);font-size:10.5px}
 .form-label{display:block;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px}
 .form-input,.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border-light);color:var(--text);font-family:var(--sans);font-size:13px;padding:7px 9px;outline:none;border-radius:2px;transition:border-color .12s}
 .form-input:focus,.form-textarea:focus{border-color:var(--accent)}
-select.form-input{cursor:pointer}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--text-muted)}
 .form-textarea{resize:vertical;min-height:64px}
 .mono-f{font-family:var(--mono)!important;font-size:12px!important}
@@ -296,12 +295,9 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Demandeur</label>
-          <!-- Sélecteur admin (liste Firestore) -->
-          <select class="form-input" id="f-dem-select" style="display:none" onchange="onDemSelectChange(this)"></select>
-          <!-- Champ texte : utilisé par les users (verrouillé) et admins (saisie libre) -->
-          <input class="form-input" type="text" id="f-dem" placeholder="Saisir ou sélectionner…" autocomplete="off">
-          <!-- Bouton retour liste (admin saisie libre → remettre le select) -->
-          <button type="button" id="f-dem-back" style="display:none;margin-top:5px;width:100%" class="btn-sm" onclick="demBackToSelect()">↩ Revenir à la liste</button>
+          <input class="form-input" type="text" id="f-dem"
+            list="dem-list" placeholder="Saisir ou sélectionner…">
+          <datalist id="dem-list"></datalist>
         </div>
         <div class="form-group">
           <label class="form-label" for="f-date">Date de la demande</label>
@@ -551,57 +547,10 @@ onAuthStateChanged(auth, async function(user) {
 // ════════════════════════════════════════════════
 //  LISTE UTILISATEURS pour datalist demandeur
 // ════════════════════════════════════════════════
-async function loadUsersList(role, currentNom) {
-  var selEl   = document.getElementById('f-dem-select');
-  var inputEl = document.getElementById('f-dem');
-
-  if (role !== 'admin') {
-    // Utilisateur : champ texte verrouillé sur son propre nom
-    window._userNoms       = [currentNom];
-    window._isAdminSession = false;
-    selEl.style.display    = 'none';
-    inputEl.style.display  = '';
-    inputEl.value          = currentNom;
-    inputEl.readOnly       = true;
-    inputEl.style.color    = 'var(--text-dim)';
-    inputEl.style.cursor   = 'default';
-    return;
-  }
-
-  // Admin : select déroulant peuplé depuis Firestore
-  window._isAdminSession = true;
-  try {
-    var snap = await getDocs(collection(firestore, 'users'));
-    var noms = [];
-    snap.forEach(function(d) {
-      var nom = d.data().nom;
-      if (nom) noms.push(nom);
-    });
-    noms.sort();
-    window._userNoms = noms;
-    // Peuple le select
-    selEl.innerHTML = '<option value="">— Sélectionner —</option>';
-    noms.forEach(function(nom) {
-      var opt = document.createElement('option');
-      opt.value = nom; opt.textContent = nom;
-      selEl.appendChild(opt);
-    });
-    // Option saisie libre en bas de liste
-    var autreOpt = document.createElement('option');
-    autreOpt.value = '__autre__'; autreOpt.textContent = '✏ Saisie libre…';
-    selEl.appendChild(autreOpt);
-    // Affiche le select, cache le champ texte
-    selEl.style.display    = '';
-    inputEl.style.display  = 'none';
-    inputEl.readOnly       = false;
-    var backBtn = document.getElementById('f-dem-back');
-    if (backBtn) backBtn.style.display = 'none';
-  } catch(e) {
-    console.error('loadUsersList:', e);
-    // En cas d'erreur, fallback sur saisie libre
-    selEl.style.display   = 'none';
-    inputEl.style.display = '';
-  }
+function loadUsersList(role, currentNom) {
+  // Stocke simplement le rôle et le nom — le datalist est peuplé à l'ouverture du modal
+  window._isAdminSession = (role === 'admin');
+  window._currentNom     = currentNom;
 }
 
 // ════════════════════════════════════════════════
@@ -641,6 +590,23 @@ document.getElementById('chpwd-btn').addEventListener('click', async function() 
 // ════════════════════════════════════════════════
 //  CRUD FIRESTORE (exposé globalement)
 // ════════════════════════════════════════════════
+// Expose getDocs users pour le script classique
+window.fsGetUsers = async function() {
+  try {
+    var snap = await getDocs(collection(firestore, 'users'));
+    var noms = [];
+    snap.forEach(function(d) {
+      var nom = d.data().nom;
+      if (nom) noms.push(nom);
+    });
+    noms.sort();
+    return noms;
+  } catch(e) {
+    console.error('fsGetUsers:', e);
+    return [];
+  }
+};
+
 window.fsCreate = async function(data) {
   try {
     await addDoc(collection(firestore, 'demandes'), Object.assign({}, data, {
@@ -695,42 +661,11 @@ window.fsDeleteArchive = async function(fid) {
 //  CONSTANTES
 // ════════════════════════════════════════════════
 // Gestion du select admin → champ libre si "Autre"
-function onDemSelectChange(sel) {
-  if (sel.value === '__autre__') {
-    // Bascule vers champ texte libre
-    sel.style.display = 'none';
-    var inp = document.getElementById('f-dem');
-    inp.style.display = '';
-    inp.readOnly      = false;
-    inp.style.color   = '';
-    inp.style.cursor  = '';
-    inp.value         = '';
-    inp.focus();
-    inp.dataset.manualEntry = 'true';
-    var backBtn = document.getElementById('f-dem-back');
-    if (backBtn) backBtn.style.display = '';
-  }
-}
-function demBackToSelect() {
-  var sel = document.getElementById('f-dem-select');
-  var inp = document.getElementById('f-dem');
-  var backBtn = document.getElementById('f-dem-back');
-  sel.value = '';
-  sel.style.display = '';
-  inp.style.display = 'none';
-  inp.value = '';
-  inp.dataset.manualEntry = '';
-  if (backBtn) backBtn.style.display = 'none';
-}
+// (select supprimé — datalist natif utilisé)
 
 // Récupère la valeur demandeur selon le mode (select ou input)
 function getDemandeurValue() {
-  var selEl   = document.getElementById('f-dem-select');
-  var inputEl = document.getElementById('f-dem');
-  if (window._isAdminSession && selEl.style.display !== 'none') {
-    return selEl.value === '__autre__' ? '' : selEl.value;
-  }
-  return inputEl.value.trim();
+  return document.getElementById('f-dem').value.trim();
 }
 
 var STATUS_COLS = [
@@ -862,27 +797,21 @@ function openModal(editFid) {
   if (isEdit) {
     var entry = findEntry(_editId);
     if (!entry) return;
-    // En édition : pré-remplir selon le mode
-    var _selEdit   = document.getElementById('f-dem-select');
-    var _inpEdit   = document.getElementById('f-dem');
-    if (window._isAdminSession) {
-      _selEdit.style.display = '';
-      _inpEdit.style.display = 'none';
-      // Cherche le nom dans le select, sinon bascule en saisie libre
-      var _found = false;
-      for (var _i = 0; _i < _selEdit.options.length; _i++) {
-        if (_selEdit.options[_i].value === entry.demandeur) { _selEdit.value = entry.demandeur; _found = true; break; }
-      }
-      if (!_found) {
-        _selEdit.style.display = 'none';
-        _inpEdit.style.display = '';
-        _inpEdit.readOnly = false; _inpEdit.style.color = ''; _inpEdit.style.cursor = '';
-        _inpEdit.value = entry.demandeur;
-      }
-    } else {
-      _selEdit.style.display = 'none';
-      _inpEdit.style.display = '';
-      _inpEdit.value = entry.demandeur;
+    // En édition : pré-remplir le champ demandeur
+    var _inpEdit = document.getElementById('f-dem');
+    var _dlEdit  = document.getElementById('dem-list');
+    _inpEdit.value    = entry.demandeur;
+    _inpEdit.readOnly = !window._isAdminSession;
+    _inpEdit.style.color  = _inpEdit.readOnly ? 'var(--text-dim)' : '';
+    _inpEdit.style.cursor = _inpEdit.readOnly ? 'default' : '';
+    _dlEdit.innerHTML = '';
+    if (window._isAdminSession && window.fsGetUsers) {
+      window.fsGetUsers().then(function(noms) {
+        noms.forEach(function(nom) {
+          var opt = document.createElement('option');
+          opt.value = nom; _dlEdit.appendChild(opt);
+        });
+      });
     }
     document.getElementById('f-date').value = displayToISO(entry.date);
     entry.refData.forEach(function(rd) { addRefRow(rd.ref); });
@@ -939,26 +868,33 @@ function openModal(editFid) {
     document.getElementById('desig-global-block').style.display = '';
     document.getElementById('desig-per-block').style.display    = 'none';
     // Demandeur : auto-rempli pour utilisateur, vide pour admin
-    var selEl    = document.getElementById('f-dem-select');
     var demInput = document.getElementById('f-dem');
-    var backBtn  = document.getElementById('f-dem-back');
+    var dl       = document.getElementById('dem-list');
     if (!window._isAdminSession) {
-      // Utilisateur : champ texte verrouillé sur son nom
-      selEl.style.display    = 'none';
-      demInput.style.display = '';
-      demInput.value         = window._session.nom || '';
-      demInput.readOnly      = true;
-      demInput.style.color   = 'var(--text-dim)';
-      demInput.style.cursor  = 'default';
-      if (backBtn) backBtn.style.display = 'none';
+      // Utilisateur : champ verrouillé sur son propre nom
+      demInput.value    = window._currentNom || window._session.nom || '';
+      demInput.readOnly = true;
+      demInput.style.color  = 'var(--text-dim)';
+      demInput.style.cursor = 'default';
+      dl.innerHTML = '';
     } else {
-      // Admin : select visible, champ texte caché, bouton retour caché
-      selEl.style.display    = '';
-      selEl.value            = '';
-      demInput.style.display = 'none';
-      demInput.value         = '';
-      demInput.dataset.manualEntry = '';
-      if (backBtn) backBtn.style.display = 'none';
+      // Admin : champ libre + datalist depuis Firestore
+      demInput.value    = '';
+      demInput.readOnly = false;
+      demInput.style.color  = '';
+      demInput.style.cursor = '';
+      dl.innerHTML = '';
+      // Peuple le datalist de manière asynchrone
+      if (window.fsGetUsers) {
+        window.fsGetUsers().then(function(noms) {
+          dl.innerHTML = '';
+          noms.forEach(function(nom) {
+            var opt = document.createElement('option');
+            opt.value = nom;
+            dl.appendChild(opt);
+          });
+        });
+      }
     }
     addRefRow();
   }
