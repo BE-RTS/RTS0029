@@ -16,7 +16,7 @@ Dernière mise à jour : 2026
 7. Flux de données
 8. Gestion des utilisateurs
 9. Déploiement
-10. [Maintenance & opérations courantes
+10. Maintenance & opérations courantes
 
 ---
 
