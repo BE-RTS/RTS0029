@@ -707,7 +707,7 @@ function openPdf(dataUri) {
     for (var i = 0; i < byteString.length; i++) { ia[i] = byteString.charCodeAt(i); }
     var blob = new Blob([ab], { type: 'application/pdf' });
     var url = URL.createObjectURL(blob);
-    openPdfLightbox(m.data);
+    openPdfLightbox(dataUri);
     setTimeout(function() { URL.revokeObjectURL(url); }, 10000);
   } catch(e) {
     console.error('openPdf:', e);
