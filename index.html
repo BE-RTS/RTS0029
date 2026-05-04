@@ -500,9 +500,24 @@ onAuthStateChanged(auth, async function(user) {
     document.getElementById('app').style.display = '';
 
     // Stocke le nom pour usage dans openModal()
-    window._session.nom = profile.nom || user.email;
-    // Charge la liste des utilisateurs pour le formulaire
-    loadUsersList(profile.role, profile.nom || user.email);
+    window._session.nom    = profile.nom || user.email;
+    window._isAdminSession = (profile.role === 'admin');
+    window._currentNom     = profile.nom || user.email;
+    window._userNoms       = [];
+
+    // Si admin : charge la liste des noms depuis Firestore dès le login
+    if (profile.role === 'admin') {
+      try {
+        var usersSnap = await getDocs(collection(firestore, 'users'));
+        var noms = [];
+        usersSnap.forEach(function(d) {
+          var nom = d.data().nom;
+          if (nom) noms.push(nom);
+        });
+        noms.sort();
+        window._userNoms = noms;
+      } catch(e) { console.error('load users list:', e); }
+    }
 
     // Listeners temps réel
     _unsubDemandes = onSnapshot(
@@ -548,9 +563,9 @@ onAuthStateChanged(auth, async function(user) {
 //  LISTE UTILISATEURS pour datalist demandeur
 // ════════════════════════════════════════════════
 function loadUsersList(role, currentNom) {
-  // Stocke simplement le rôle et le nom — le datalist est peuplé à l'ouverture du modal
   window._isAdminSession = (role === 'admin');
   window._currentNom     = currentNom;
+  // Les noms ont déjà été chargés dans onAuthStateChanged
 }
 
 // ════════════════════════════════════════════════
@@ -590,23 +605,6 @@ document.getElementById('chpwd-btn').addEventListener('click', async function() 
 // ════════════════════════════════════════════════
 //  CRUD FIRESTORE (exposé globalement)
 // ════════════════════════════════════════════════
-// Expose getDocs users pour le script classique
-window.fsGetUsers = async function() {
-  try {
-    var snap = await getDocs(collection(firestore, 'users'));
-    var noms = [];
-    snap.forEach(function(d) {
-      var nom = d.data().nom;
-      if (nom) noms.push(nom);
-    });
-    noms.sort();
-    return noms;
-  } catch(e) {
-    console.error('fsGetUsers:', e);
-    return [];
-  }
-};
-
 window.fsCreate = async function(data) {
   try {
     await addDoc(collection(firestore, 'demandes'), Object.assign({}, data, {
@@ -660,6 +658,23 @@ window.fsDeleteArchive = async function(fid) {
 // ════════════════════════════════════════════════
 //  CONSTANTES
 // ════════════════════════════════════════════════
+// Ouvre un PDF base64 via Blob URL (contourne le blocage des data: URI)
+function openPdf(dataUri) {
+  try {
+    var byteString = atob(dataUri.split(',')[1]);
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) { ia[i] = byteString.charCodeAt(i); }
+    var blob = new Blob([ab], { type: 'application/pdf' });
+    var url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    setTimeout(function() { URL.revokeObjectURL(url); }, 10000);
+  } catch(e) {
+    console.error('openPdf:', e);
+    alert('Impossible d'ouvrir le PDF.');
+  }
+}
+
 // Gestion du select admin → champ libre si "Autre"
 // (select supprimé — datalist natif utilisé)
 
@@ -805,12 +820,10 @@ function openModal(editFid) {
     _inpEdit.style.color  = _inpEdit.readOnly ? 'var(--text-dim)' : '';
     _inpEdit.style.cursor = _inpEdit.readOnly ? 'default' : '';
     _dlEdit.innerHTML = '';
-    if (window._isAdminSession && window.fsGetUsers) {
-      window.fsGetUsers().then(function(noms) {
-        noms.forEach(function(nom) {
-          var opt = document.createElement('option');
-          opt.value = nom; _dlEdit.appendChild(opt);
-        });
+    if (window._isAdminSession) {
+      (window._userNoms || []).forEach(function(nom) {
+        var opt = document.createElement('option');
+        opt.value = nom; _dlEdit.appendChild(opt);
       });
     }
     document.getElementById('f-date').value = displayToISO(entry.date);
@@ -878,23 +891,17 @@ function openModal(editFid) {
       demInput.style.cursor = 'default';
       dl.innerHTML = '';
     } else {
-      // Admin : champ libre + datalist depuis Firestore
+      // Admin : champ libre + datalist depuis cache window._userNoms
       demInput.value    = '';
       demInput.readOnly = false;
       demInput.style.color  = '';
       demInput.style.cursor = '';
       dl.innerHTML = '';
-      // Peuple le datalist de manière asynchrone
-      if (window.fsGetUsers) {
-        window.fsGetUsers().then(function(noms) {
-          dl.innerHTML = '';
-          noms.forEach(function(nom) {
-            var opt = document.createElement('option');
-            opt.value = nom;
-            dl.appendChild(opt);
-          });
-        });
-      }
+      (window._userNoms || []).forEach(function(nom) {
+        var opt = document.createElement('option');
+        opt.value = nom;
+        dl.appendChild(opt);
+      });
     }
     addRefRow();
   }
@@ -1042,7 +1049,7 @@ function renderFormMedia() {
     if (m.type === 'application/pdf') {
       div.innerHTML = '<div class="pdf-icon"><span style="font-size:22px">📄</span>'
         + '<span class="pdf-name">' + m.name + '</span></div>';
-      div.querySelector('.pdf-icon').addEventListener('click', function() { window.open(m.data, '_blank'); });
+      div.querySelector('.pdf-icon').addEventListener('click', function() { openPdf(m.data); });
     } else {
       var img = document.createElement('img');
       img.src = m.data; img.alt = m.name;
@@ -1151,7 +1158,7 @@ function buildDetailHTML(entry) {
   media.forEach(function(m) {
     h += '<div class="media-thumb">';
     if (m.type === 'application/pdf') {
-      h += '<div class="pdf-icon" onclick="window.open(\'' + m.data.replace(/'/g,"\\'") + '\',\'_blank\')">'
+      h += '<div class="pdf-icon" onclick="openPdf(\'' + m.data.replace(/'/g,"\\'") + '\')">'
         + '<span style="font-size:22px">📄</span><span class="pdf-name">' + m.name + '</span></div>';
     } else {
       h += '<img src="' + m.data + '" alt="' + m.name + '" onclick="openLightbox(\'' + m.data.replace(/'/g,"\\'") + '\')">';
