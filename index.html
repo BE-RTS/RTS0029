@@ -366,12 +366,6 @@ input[type="checkbox"]{accent-color:var(--accent);width:13px;height:13px;cursor:
   <img id="lb-img" src="" alt="">
 </div>
 
-<!-- IFRAME -->
-<div class="lightbox" id="pdf-lightbox">
-  <button class="lb-close" id="pdf-close">✕</button>
-  <iframe id="pdf-frame" style="width:90vw;height:88vh;border:none;"></iframe>
-</div>
-
 <!-- CONFIRM -->
 <div class="confirm-bg" id="confirm-bg">
   <div class="confirm-box">
@@ -665,40 +659,6 @@ window.fsDeleteArchive = async function(fid) {
 //  CONSTANTES
 // ════════════════════════════════════════════════
 // Ouvre un PDF base64 via Blob URL (contourne le blocage des data: URI)
-function base64ToBlob(base64) {
-  const parts = base64.split(',');
-  const mime = parts[0].match(/:(.*?);/)[1];
-  const bstr = atob(parts[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new Blob([u8arr], { type: mime });
-}
-
-function openPdfLightbox(base64) {
-  const blob = base64ToBlob(base64);
-  const url = URL.createObjectURL(blob);
-
-  document.getElementById('pdf-frame').src = url;
-  document.getElementById('pdf-lightbox').classList.add('open');
-}
-
-function closePdfLightbox() {
-  const frame = document.getElementById('pdf-frame');
-  frame.src = '';
-  document.getElementById('pdf-lightbox').classList.remove('open');
-}
-
-document.getElementById('pdf-lightbox').addEventListener('click', function(e) {
-  if (e.target === this) closePdfLightbox();
-});
-
-document.getElementById('pdf-close').addEventListener('click', closePdfLightbox);
-  
 function openPdf(dataUri) {
   try {
     var byteString = atob(dataUri.split(',')[1]);
@@ -707,11 +667,11 @@ function openPdf(dataUri) {
     for (var i = 0; i < byteString.length; i++) { ia[i] = byteString.charCodeAt(i); }
     var blob = new Blob([ab], { type: 'application/pdf' });
     var url = URL.createObjectURL(blob);
-    openPdfLightbox(dataUri);
+    window.open(url, '_blank');
     setTimeout(function() { URL.revokeObjectURL(url); }, 10000);
   } catch(e) {
     console.error('openPdf:', e);
-    alert('Impossible d\'ouvrir le PDF.');
+    alert("Impossible d'ouvrir le PDF.");
   }
 }
 
@@ -1089,7 +1049,7 @@ function renderFormMedia() {
     if (m.type === 'application/pdf') {
       div.innerHTML = '<div class="pdf-icon"><span style="font-size:22px">📄</span>'
         + '<span class="pdf-name">' + m.name + '</span></div>';
-      div.querySelector('.pdf-icon').addEventListener('click', function() { openPdfLightbox(m.data); });
+      div.querySelector('.pdf-icon').addEventListener('click', function() { openPdf(m.data); });
     } else {
       var img = document.createElement('img');
       img.src = m.data; img.alt = m.name;
@@ -1198,7 +1158,7 @@ function buildDetailHTML(entry) {
   media.forEach(function(m) {
     h += '<div class="media-thumb">';
     if (m.type === 'application/pdf') {
-      h += '<div class="pdf-icon" onclick="openPdfLightbox(\'' + m.data.replace(/'/g,"\\'") + '\')">'
+      h += '<div class="pdf-icon" onclick="openPdf(\'' + m.data.replace(/'/g,"\\'") + '\')">'
         + '<span style="font-size:22px">📄</span><span class="pdf-name">' + m.name + '</span></div>';
     } else {
       h += '<img src="' + m.data + '" alt="' + m.name + '" onclick="openLightbox(\'' + m.data.replace(/'/g,"\\'") + '\')">';
