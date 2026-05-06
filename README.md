@@ -20,7 +20,7 @@ Norme ISO 9001/2015 Système de management de la qualité.
 
 Deux types de modifications :
 
-- **Mineure (entraîne la fiche RTS 0029)**C'est une modification qui n'intervient pas:
+- **Mineure (entraîne la fiche RTS 0029)**C'est une modification qui n'intervient pas:**
     - dans la forme du produit
     - dans ses fonctionnalités principales
     - dans sa présentation catalogue
